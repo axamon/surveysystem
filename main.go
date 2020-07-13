@@ -12,8 +12,9 @@ import (
 
 var (
 	// key must be 16, 24 or 32 bytes long (AES-128, AES-192 or AES-256)
-	key   = []byte("testdisurvey")
-	store = sessions.NewCookieStore(key)
+	key    = []byte("testdisurvey")
+	store  = sessions.NewCookieStore(key)
+	userdn string
 )
 
 func secret(w http.ResponseWriter, r *http.Request) {
@@ -28,7 +29,7 @@ func secret(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// Print secret message
-	fmt.Fprintln(w, "Questo lo leggi solo se ti sei autenticato")
+	fmt.Fprintln(w, "Ciao "+userdn+" Questo lo leggi solo se ti sei autenticato")
 }
 
 func logout(w http.ResponseWriter, r *http.Request) {
@@ -41,7 +42,7 @@ func logout(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		log.Println(err)
 	}
-	http.Redirect(w, r, "/login", http.StatusFound)
+	http.Redirect(w, r, "/login", http.StatusAccepted)
 }
 
 func login(w http.ResponseWriter, r *http.Request) {
@@ -59,7 +60,9 @@ func login(w http.ResponseWriter, r *http.Request) {
 		//fmt.Fprintf(w, "Post from website! r.PostFrom = %v\n", r.PostForm)
 		username := r.FormValue("username")
 		password := r.FormValue("password")
-		ok, err := ldaplogin.IsOK(username, password)
+		var ok bool
+		var err error
+		ok, userdn, err = ldaplogin.IsOK(username, password)
 		if err != nil {
 			http.Redirect(w, r, "/login", 301)
 			return
