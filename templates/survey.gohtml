@@ -1,10 +1,37 @@
 <h1>{{.Titolo}}</h1>
+<h4>Inizio: {{.Inizio}} Fine: {{.Fine}}</h4>
+
+
+<div>
+<form method="POST" action="/">
 <ul>
-    {{range .Todos}}
-        {{if .Done}}
-            <li class="done">{{.Title}}</li>
-        {{else}}
-            <li>{{.Title}}</li>
-        {{end}}
+{{range $index, $value := .Domande.Domanda}}
+
+    {{ if (eq .Tipo "booleana") }}
+        <li>{{.Text}}</li>
+        <input type="radio" id="si" name={{$index}} value="si">
+        <label for="si">Si</label>
+        <input type="radio" id="no" name={{$index}} value="no">
+        <label for="no">No</label>
+        <br>
     {{end}}
+
+    {{ if (eq .Tipo "libera") }}
+        <li>{{.Text}}</li>
+        <input type="textarea" id="textarea" name={{$index}}>
+    {{end}}
+
+    {{ if (eq .Tipo "multipla") }}
+        <li>{{.Text}}</li>
+        <select name="elementi" id="elementi" multiple>
+        {{range $indexr, $value := .Risposte.Risposta}}
+             <option value={{$value}}>{{$value}}</option>
+        {{end}}
+        </select>
+    {{end}}
+
+{{end}}
+ <input type="submit" value="Invia">
 </ul>
+</form>
+</div>

@@ -12,12 +12,12 @@ type Survey struct {
 	Domande struct {
 		Text    string `xml:",chardata"`
 		Domanda []struct {
-			Text    string `xml:",chardata"`
-			Tipo    string `xml:"tipo,attr"`
-			Riposte struct {
-				Text    string   `xml:",chardata"`
-				Riposta []string `xml:"riposta"`
-			} `xml:"riposte"`
+			Text     string `xml:",chardata"`
+			Tipo     string `xml:"tipo,attr"`
+			Risposte struct {
+				Text     string   `xml:",chardata"`
+				Risposta []string `xml:"risposta"`
+			} `xml:"risposte"`
 		} `xml:"domanda"`
 	} `xml:"domande"`
 }

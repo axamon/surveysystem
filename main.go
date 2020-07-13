@@ -2,11 +2,14 @@ package main
 
 import (
 	"crypto/rand"
+	"encoding/xml"
 	"flag"
 	"fmt"
+	"io/ioutil"
 	"log"
 	"net/http"
 	"survey/ldaplogin"
+	"text/template"
 
 	"github.com/gorilla/sessions"
 )
@@ -86,6 +89,23 @@ func login(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
+func survey(w http.ResponseWriter, r *http.Request) {
+	tmpl := template.Must(template.ParseFiles("templates/survey.gohtml"))
+
+	data, err := ioutil.ReadFile("surveys/primo.xml")
+	if err != nil {
+		log.Println(err)
+	}
+
+	note := &Survey{}
+
+	err = xml.Unmarshal([]byte(data), &note)
+	if err != nil {
+		log.Println(err)
+	}
+	tmpl.Execute(w, note)
+}
+
 func main() {
 
 	var address = flag.String("addr", ":8080", "Server address")
@@ -99,6 +119,7 @@ func main() {
 	http.HandleFunc("/secret", secret)
 	http.HandleFunc("/login", login)
 	http.HandleFunc("/logout", logout)
+	http.HandleFunc("/survey", survey)
 
 	err := http.ListenAndServe(*address, nil)
 	if err != nil {

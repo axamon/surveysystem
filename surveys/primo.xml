@@ -1,0 +1,22 @@
+<?xml version="1.0"?>
+<survey titolo="Esempio Survey Process Adoption" inizio="20200714"
+ fine="20200717">
+<domande>
+<domanda tipo="booleana">Conosci il significato di Waterfall in ambito processi di sviluppo SW?</domanda>
+<domanda tipo="booleana">Conosci il significato di Agile in ambito processi di sviluppo SW?</domanda>
+<domanda tipo="booleana">Hai partecipato a progetti gestiti in modalità Waterfall?</domanda>
+<domanda tipo="booleana">Hai partecipato a progetti gestiti in modalità Agile?</domanda>
+<domanda tipo="booleana">Hai partecipato a progetti gestiti in modalità Waterfall?"</domanda>
+<domanda tipo="libera">Elenca i processi che hai seguito in modalità Waterfall</domanda>
+<domanda tipo="libera">Elenca i processi che hai seguito in modalità Agile</domanda>
+<domanda tipo="multipla">Quali di questi concetti fanno parte del medodo Agile
+<risposte>
+    <risposta>Scrum</risposta>
+    <risposta>Sprint</risposta>
+    <risposta>Kanban</risposta>
+    <risposta>Iso 20000</risposta>
+    <risposta>muda</risposta>
+</risposte>
+</domanda>
+</domande>
+</survey>
