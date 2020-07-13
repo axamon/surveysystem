@@ -1,6 +1,7 @@
 package main
 
 import (
+	"crypto/rand"
 	"flag"
 	"fmt"
 	"log"
@@ -12,12 +13,14 @@ import (
 
 var (
 	// key must be 16, 24 or 32 bytes long (AES-128, AES-192 or AES-256)
-	key    = []byte("testdisurvey")
+	token  = make([]byte, 32)
+	key    = []byte(fmt.Sprint(rand.Read(token)))
 	store  = sessions.NewCookieStore(key)
 	userdn string
 )
 
 func secret(w http.ResponseWriter, r *http.Request) {
+
 	session, _ := store.Get(r, "surveyCTIO")
 
 	// Check if user is authenticated
@@ -33,16 +36,19 @@ func secret(w http.ResponseWriter, r *http.Request) {
 }
 
 func logout(w http.ResponseWriter, r *http.Request) {
-	session, _ := store.Get(r, "surveyCTIO")
-
-	// Revoke users authentication
-	session.Values["authenticated"] = false
-	session.Options.MaxAge = -1
-	err := session.Save(r, w)
+	session, err := store.Get(r, "surveyCTIO")
 	if err != nil {
 		log.Println(err)
 	}
-	http.Redirect(w, r, "/login", http.StatusAccepted)
+	// Revoke users authentication
+	session.Values["authenticated"] = false
+	session.Options.MaxAge = -1
+	err = session.Save(r, w)
+	if err != nil {
+		log.Println(err)
+	}
+	w.Write([]byte("Logout effettuato"))
+	// http.Redirect(w, r, "/login", http.StatusAccepted)
 }
 
 func login(w http.ResponseWriter, r *http.Request) {
@@ -73,6 +79,7 @@ func login(w http.ResponseWriter, r *http.Request) {
 			session.Values["authenticated"] = true
 		}
 		session.Save(r, w)
+		http.Redirect(w, r, "/secret", http.StatusTemporaryRedirect)
 
 	default:
 		fmt.Fprintf(w, "Sorry, only GET and POST methods are supported.")
