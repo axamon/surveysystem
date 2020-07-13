@@ -1,11 +1,11 @@
 package main
 
 import (
-    "fmt"
+	"flag"
+	"fmt"
 	"survey/ldaplogin"
 	"log"
 	"net/http"
-
     "github.com/gorilla/sessions"
 )
 
@@ -20,8 +20,10 @@ func secret(w http.ResponseWriter, r *http.Request) {
 
     // Check if user is authenticated
     if auth, ok := session.Values["authenticated"].(bool); !ok || !auth {
-        http.Error(w, "Forbidden", http.StatusForbidden)
-        return
+		
+		http.Redirect(w, r, "/login", http.StatusMovedPermanently)
+		
+		return
     }
 
     // Print secret message
@@ -33,7 +35,8 @@ func logout(w http.ResponseWriter, r *http.Request) {
 
     // Revoke users authentication
     session.Values["authenticated"] = false
-    session.Save(r, w)
+	session.Save(r, w)
+	http.Redirect(w, r, "/login", 301)
 }
 
 func login(w http.ResponseWriter, r *http.Request) {
@@ -59,7 +62,7 @@ func login(w http.ResponseWriter, r *http.Request) {
 		password := r.FormValue("password")
 		ok, err := ldaplogin.IsOK(username,password)
 		if err != nil {
-			fmt.Fprintf(w, "Credenziali errate")
+			http.Redirect(w, r, "/login", 301)
 			return
 		}
 
@@ -68,7 +71,7 @@ func login(w http.ResponseWriter, r *http.Request) {
 		session.Values["authenticated"] = true
 		}
 		session.Save(r, w)
-        http.Redirect(w, r, "/secret", http.StatusMovedPermanently)
+        http.Redirect(w, r, "/secret", 301)
     default:
         fmt.Fprintf(w, "Sorry, only GET and POST methods are supported.")
     }
@@ -76,6 +79,9 @@ func login(w http.ResponseWriter, r *http.Request) {
  
 
 func main() {
+
+	var address = flag.String("addr",":8080","Server address")
+	flag.Parse()
 
 	http.HandleFunc("/", login)
 
@@ -87,7 +93,7 @@ func main() {
     http.HandleFunc("/login", login)
     http.HandleFunc("/logout", logout)
 
-	err := http.ListenAndServe(":3000", nil)
+	err := http.ListenAndServe(*address, nil)
 	if err != nil {
 	  log.Fatal(err)
 	}
