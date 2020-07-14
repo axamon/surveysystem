@@ -23,17 +23,12 @@ var (
 )
 
 func secret(w http.ResponseWriter, r *http.Request) {
-
 	session, _ := store.Get(r, "surveyCTIO")
-
 	// Check if user is authenticated
 	if auth, ok := session.Values["authenticated"].(bool); !ok || !auth {
-
 		http.Error(w, "vietato", http.StatusForbidden)
-
 		return
 	}
-
 	// Print secret message
 	fmt.Fprintln(w, "Ciao "+userdn+" Questo lo leggi solo se ti sei autenticato")
 }
@@ -59,7 +54,7 @@ func login(w http.ResponseWriter, r *http.Request) {
 
 	switch r.Method {
 	case "GET":
-		http.ServeFile(w, r, "static/login.html")
+		http.ServeFile(w, r, "static/index.html")
 	case "POST":
 		// Call ParseForm() to parse the raw query and update r.PostForm and r.Form.
 		if err := r.ParseForm(); err != nil {
@@ -76,29 +71,31 @@ func login(w http.ResponseWriter, r *http.Request) {
 			http.Redirect(w, r, "/login", 301)
 			return
 		}
-
 		// Set user as authenticated
 		if ok {
 			session.Values["authenticated"] = true
 		}
 		session.Save(r, w)
 		http.Redirect(w, r, "/secret", http.StatusTemporaryRedirect)
-
 	default:
 		fmt.Fprintf(w, "Sorry, only GET and POST methods are supported.")
 	}
 }
 
 func survey(w http.ResponseWriter, r *http.Request) {
+	session, _ := store.Get(r, "surveyCTIO")
+	// Check if user is authenticated
+	if auth, ok := session.Values["authenticated"].(bool); !ok || !auth {
+		http.Error(w, "vietato", http.StatusForbidden)
+		return
+	}
 	tmpl := template.Must(template.ParseFiles("templates/survey.gohtml"))
 
 	data, err := ioutil.ReadFile("surveys/primo.xml")
 	if err != nil {
 		log.Println(err)
 	}
-
 	note := &Survey{}
-
 	err = xml.Unmarshal([]byte(data), &note)
 	if err != nil {
 		log.Println(err)
@@ -106,24 +103,36 @@ func survey(w http.ResponseWriter, r *http.Request) {
 	tmpl.Execute(w, note)
 }
 
-func main() {
+func middleware(next http.Handler) http.Handler {
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		session, _ := store.Get(r, "surveyCTIO")
+		// Check if user is authenticated
+		if auth, ok := session.Values["authenticated"].(bool); !ok || !auth {
+			http.Error(w, "vietato", http.StatusForbidden)
+			return
+		}
+		next.ServeHTTP(w, r)
+	})
+}
 
+func main() {
 	var address = flag.String("addr", ":8080", "Server address")
 	flag.Parse()
-
-	http.HandleFunc("/", login)
-
+	// http.HandleFunc("/", login)
+	// http.HandleFunc("/secret", secret)
+	// http.HandleFunc("/login", login)
+	// http.HandleFunc("/logout", logout)
+	// http.HandleFunc("/survey", survey)
+	mux := http.NewServeMux()
 	fs := http.FileServer(http.Dir("./static"))
-	http.Handle("/static", fs)
+	mux.Handle("/", fs)
+	mux.HandleFunc("/login", login)
+	mux.HandleFunc("/logout", logout)
+	mux.HandleFunc("/survey", survey)
+	mux.HandleFunc("/secret", secret)
 
-	http.HandleFunc("/secret", secret)
-	http.HandleFunc("/login", login)
-	http.HandleFunc("/logout", logout)
-	http.HandleFunc("/survey", survey)
-
-	err := http.ListenAndServe(*address, nil)
+	err := http.ListenAndServe(*address, mux)
 	if err != nil {
 		log.Fatal(err)
 	}
-
 }

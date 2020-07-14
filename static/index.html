@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8" />
+  <style type ="text/css" >
+  .title{
+    position: fixed;
+    text-align: center;
+    color: blue;
+    top: 2px;
+    width: 100%;
+    font-size: x-large;
+    style: bold;
+  }
+    .footer{ 
+        position: fixed;     
+        text-align: center;    
+        bottom: 2px; 
+        width: 100%;
+        font-size: xx-small;
+    }
+  </style> 
+</head>
+<title>login</title>
+<body>
+
+  <div class="title">CTIO - Survey System login</div>
+  <br>
+  <img src="survey.jpg"/>
+  <br>
+  <div id="post_form">
+    <ul>
+      <form method="POST" action="/login">
+        <li>     
+            <label>Matricola </label><input name="username" type="text" value="" />
+        </li>
+        <li>
+            <label>Password</label> <input name="password" type="password" value="" />
+        </li>
+            <input type="submit" value="Invia" />
+      </form>
+    </ul>
+  </div>
+
+ 
+  <div class="footer">Made by <a href="mailto:alberto.bregliano@telecomitalia.it">Alberto Bregliano</a> - Copyright 2020 &copy - All Rights Reserved</div>
+</div>
+
+</body>
+</html>
