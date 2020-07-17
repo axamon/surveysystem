@@ -64,12 +64,11 @@ func survey(w http.ResponseWriter, r *http.Request) {
 			log.Fatal(err)
 		}
 
-		var grazie = `<html>
-		<a href='/logout'>Grazie per aver partecipato</a>
-		</html>`
-
-		w.Header().Set("Content-Type", "text/html; charset=utf-8")
-		fmt.Fprint(w, grazie)
+		tmpl := template.Must(template.ParseFiles("templates/logout.gohtml"))
+		err = tmpl.Execute(w, nil)
+		if err != nil {
+			log.Println(err)
+		}
 
 	default:
 		fmt.Fprintf(w, "Sorry, only GET and POST methods are supported.")
