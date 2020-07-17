@@ -4,20 +4,33 @@ import "encoding/xml"
 
 // Survey è la struttura in cui parsare le domande
 type Survey struct {
-	XMLName xml.Name `xml:"survey"`
-	Text    string   `xml:",chardata"`
-	Titolo  string   `xml:"titolo,attr"`
-	Inizio  string   `xml:"inizio,attr"`
-	Fine    string   `xml:"fine,attr"`
-	Domande struct {
+	Utente    string
+	Matricola string
+	XMLName   xml.Name `xml:"survey"`
+	Text      string   `xml:",chardata"`
+	ID        string   `xml:"id,attr"`
+	Titolo    string   `xml:"titolo,attr"`
+	Inizio    string   `xml:"inizio,attr"`
+	Fine      string   `xml:"fine,attr"`
+	Domande   struct {
 		Text    string `xml:",chardata"`
 		Domanda []struct {
-			Text     string `xml:",chardata"`
-			Tipo     string `xml:"tipo,attr"`
-			Risposte struct {
-				Text     string   `xml:",chardata"`
-				Risposta []string `xml:"risposta"`
-			} `xml:"risposte"`
+			Text    string `xml:",chardata"`
+			Tipo    string `xml:"tipo,attr"`
+			Opzioni struct {
+				Text    string   `xml:",chardata"`
+				Opzione []string `xml:"opzione"`
+			} `xml:"opzioni"`
 		} `xml:"domanda"`
 	} `xml:"domande"`
+}
+
+// Utente contiene le informazioni anagrafiche.
+type Utente struct {
+	Matricola string
+	Nome      string
+	Cognome   string
+	Mail      string
+	Surveys   []Survey
+	Riposte   []string
 }

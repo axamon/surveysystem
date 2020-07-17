@@ -6,9 +6,10 @@ body {
     text-align: left;
     color: blue;
     top: 2px;
-    width: 100%;
-    font-size: x-large;
+    width: 95%;
+    font-size: xx-large;
     font-style: bold;
+    font-family: Tahoma, sans-serifd;
   }
 .footer{ 
     position: fixed;     

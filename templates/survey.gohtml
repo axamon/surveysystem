@@ -3,12 +3,16 @@
 <head>
 <link rel="stylesheet" href="styles.css">
 </head>
+{{$name := .}}
 <h1>{{.Titolo}}</h1>
+<h3>Ciao {{.Utente}}</h3>
 <h4>Inizio: {{.Inizio}} Fine: {{.Fine}}</h4>
 
-
+<img src="survey.jpg" />
 <div>
-<form method="POST" action="/">
+<form method="POST" action="/survey">
+<input type="hidden" id="utente" name="utente" value={{.Utente}}>
+<input type="hidden" id="matricola" name="matricola" value={{.Matricola}}>
 <ul>
 {{range $index, $value := .Domande.Domanda}}
 
@@ -28,8 +32,8 @@
 
     {{ if (eq .Tipo "multipla") }}
         <li>{{.Text}}</li>
-        <select name="elementi" id="elementi" multiple>
-        {{range $indexr, $value := .Risposte.Risposta}}
+        <select name={{$index}} id="elementi" multiple>
+        {{range $indexr, $value := .Opzioni.Opzione}}
              <option value={{$value}}>{{$value}}</option>
         {{end}}
         </select>
@@ -40,4 +44,6 @@
 </ul>
 </form>
 </div>
+<div class="footer">Made by <a href="mailto:alberto.bregliano@telecomitalia.it">Alberto Bregliano</a> - Copyright 2020 &copy - All Rights Reserved</div>
+
 </html>

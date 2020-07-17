@@ -2,35 +2,38 @@ package main
 
 import (
 	"crypto/rand"
-	"encoding/xml"
 	"flag"
 	"fmt"
-	"io/ioutil"
 	"log"
 	"net/http"
+
 	"survey/ldaplogin"
-	"text/template"
 
 	"github.com/gorilla/sessions"
 )
 
 var (
 	// key must be 16, 24 or 32 bytes long (AES-128, AES-192 or AES-256)
-	token  = make([]byte, 32)
-	key    = []byte(fmt.Sprint(rand.Read(token)))
-	store  = sessions.NewCookieStore(key)
-	userdn string
+	token = make([]byte, 32)
+	key   = []byte(fmt.Sprint(rand.Read(token)))
+	store = sessions.NewCookieStore(key)
 )
 
-func secret(w http.ResponseWriter, r *http.Request) {
-	session, _ := store.Get(r, "surveyCTIO")
-	// Check if user is authenticated
-	if auth, ok := session.Values["authenticated"].(bool); !ok || !auth {
-		http.Error(w, "vietato", http.StatusForbidden)
-		return
+func main() {
+	var address = flag.String("addr", ":8080", "Server address")
+	flag.Parse()
+
+	mux := http.NewServeMux()
+	fs := http.FileServer(http.Dir("./static"))
+	mux.Handle("/", fs)
+	mux.HandleFunc("/login", login)
+	mux.HandleFunc("/logout", logout)
+	mux.HandleFunc("/survey", survey)
+
+	err := http.ListenAndServe(*address, mux)
+	if err != nil {
+		log.Fatal(err)
 	}
-	// Print secret message
-	fmt.Fprintln(w, "Ciao "+userdn+" Questo lo leggi solo se ti sei autenticato")
 }
 
 func logout(w http.ResponseWriter, r *http.Request) {
@@ -45,16 +48,22 @@ func logout(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		log.Println(err)
 	}
-	w.Write([]byte("Logout effettuato"))
-	// http.Redirect(w, r, "/login", http.StatusAccepted)
+	log.Printf("Logout effettuato per %s", session.Values["utente"].(string))
+	// w.Write([]byte("Logout effettuato\n"))
+	// time.Sleep(2 * time.Second)
+	r.Method = "GET"
+	http.Redirect(w, r, "/", http.StatusFound)
 }
 
 func login(w http.ResponseWriter, r *http.Request) {
-	session, _ := store.Get(r, "surveyCTIO")
+	session, err := store.Get(r, "surveyCTIO")
+	if err != nil {
+		log.Println(err)
+	}
 
 	switch r.Method {
 	case "GET":
-		http.ServeFile(w, r, "static/index.html")
+		survey(w, r)
 	case "POST":
 		// Call ParseForm() to parse the raw query and update r.PostForm and r.Form.
 		if err := r.ParseForm(); err != nil {
@@ -62,45 +71,30 @@ func login(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 		//fmt.Fprintf(w, "Post from website! r.PostFrom = %v\n", r.PostForm)
-		username := r.FormValue("username")
+
+		matricola := r.FormValue("username")
 		password := r.FormValue("password")
-		var ok bool
-		var err error
-		ok, userdn, err = ldaplogin.IsOK(username, password)
+
+		ok, nomeCognome, err := ldaplogin.IsOK(matricola, password)
 		if err != nil {
 			http.Redirect(w, r, "/login", 301)
 			return
 		}
+		// ripulisci passoword
+		password = "******"
 		// Set user as authenticated
 		if ok {
 			session.Values["authenticated"] = true
+			session.Values["matricola"] = matricola
+			session.Values["utente"] = nomeCognome
 		}
 		session.Save(r, w)
-		http.Redirect(w, r, "/secret", http.StatusTemporaryRedirect)
+		r.Method = "GET"
+		//http.Redirect(w, r, "/survey", http.StatusTemporaryRedirect)
+		survey(w, r)
 	default:
-		fmt.Fprintf(w, "Sorry, only GET and POST methods are supported.")
+		fmt.Fprintf(w, "Sorry, only POST method is supported.")
 	}
-}
-
-func survey(w http.ResponseWriter, r *http.Request) {
-	session, _ := store.Get(r, "surveyCTIO")
-	// Check if user is authenticated
-	if auth, ok := session.Values["authenticated"].(bool); !ok || !auth {
-		http.Error(w, "vietato", http.StatusForbidden)
-		return
-	}
-	tmpl := template.Must(template.ParseFiles("templates/survey.gohtml"))
-
-	data, err := ioutil.ReadFile("surveys/primo.xml")
-	if err != nil {
-		log.Println(err)
-	}
-	note := &Survey{}
-	err = xml.Unmarshal([]byte(data), &note)
-	if err != nil {
-		log.Println(err)
-	}
-	tmpl.Execute(w, note)
 }
 
 func middleware(next http.Handler) http.Handler {
@@ -113,26 +107,4 @@ func middleware(next http.Handler) http.Handler {
 		}
 		next.ServeHTTP(w, r)
 	})
-}
-
-func main() {
-	var address = flag.String("addr", ":8080", "Server address")
-	flag.Parse()
-	// http.HandleFunc("/", login)
-	// http.HandleFunc("/secret", secret)
-	// http.HandleFunc("/login", login)
-	// http.HandleFunc("/logout", logout)
-	// http.HandleFunc("/survey", survey)
-	mux := http.NewServeMux()
-	fs := http.FileServer(http.Dir("./static"))
-	mux.Handle("/", fs)
-	mux.HandleFunc("/login", login)
-	mux.HandleFunc("/logout", logout)
-	mux.HandleFunc("/survey", survey)
-	mux.HandleFunc("/secret", secret)
-
-	err := http.ListenAndServe(*address, mux)
-	if err != nil {
-		log.Fatal(err)
-	}
 }
