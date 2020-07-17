@@ -63,7 +63,13 @@ func survey(w http.ResponseWriter, r *http.Request) {
 		if err != nil {
 			log.Fatal(err)
 		}
-		fmt.Fprintf(w, "Grazie per aver partecipato\n")
+
+		var grazie = `<html>
+		<a href='/logout'>Grazie per aver partecipato</a>
+		</html>`
+
+		w.Header().Set("Content-Type", "text/html; charset=utf-8")
+		fmt.Fprint(w, grazie)
 
 	default:
 		fmt.Fprintf(w, "Sorry, only GET and POST methods are supported.")
