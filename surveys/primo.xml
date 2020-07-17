@@ -1,22 +1,21 @@
 <?xml version="1.0"?>
-<survey id="1" titolo="Esempio Survey Process Adoption" inizio="20200714"
- fine="20200717">
+<survey id="1" titolo="Esempio Survey Process Adoption" inizio="20200714" fine="20200717">
 <domande>
-<domanda tipo="booleana">Conosci il significato di Waterfall in ambito processi di sviluppo SW?</domanda>
-<domanda tipo="booleana">Conosci il significato di Agile in ambito processi di sviluppo SW?</domanda>
-<domanda tipo="booleana">Hai partecipato a progetti gestiti in modalità Waterfall?</domanda>
-<domanda tipo="booleana">Hai partecipato a progetti gestiti in modalità Agile?</domanda>
-<domanda tipo="booleana">Hai partecipato a progetti gestiti in modalità Waterfall?"</domanda>
-<domanda tipo="libera">Elenca i processi che hai seguito in modalità Waterfall</domanda>
-<domanda tipo="libera">Elenca i processi che hai seguito in modalità Agile</domanda>
-<domanda tipo="multipla">Quali di questi concetti fanno parte del medodo Agile
-<opzioni>
-    <opzione>Scrum</opzione>
-    <opzione>Sprint</opzione>
-    <opzione>Kanban</opzione>
-    <opzione>Iso 20000</opzione>
-    <opzione>muda</opzione>
-</opzioni>
-</domanda>
+    <domanda id="1" tipo="booleana">Conosci il significato di Waterfall in ambito processi di sviluppo SW?</domanda>
+    <domanda id="2" tipo="booleana">Conosci il significato di Agile in ambito processi di sviluppo SW?</domanda>
+    <domanda id="3" tipo="booleana">Hai partecipato a progetti gestiti in modalità Waterfall?</domanda>
+    <domanda id="4" tipo="booleana">Hai partecipato a progetti gestiti in modalità Agile?</domanda>
+    <domanda id="5" tipo="booleana">Hai partecipato a progetti gestiti in modalità Waterfall?"</domanda>
+    <domanda id="6" tipo="libera">Elenca i processi che hai seguito in modalità Waterfall</domanda>
+    <domanda id="7" tipo="libera">Elenca i processi che hai seguito in modalità Agile</domanda>
+    <domanda id="8" tipo="multipla">Quali di questi concetti fanno parte del medodo Agile
+        <opzioni>
+            <opzione>Scrum</opzione>
+            <opzione>Sprint</opzione>
+            <opzione>Kanban</opzione>
+            <opzione>Iso 20000</opzione>
+            <opzione>muda</opzione>
+        </opzioni>
+    </domanda>
 </domande>
 </survey>

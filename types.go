@@ -15,9 +15,10 @@ type Survey struct {
 	Domande   struct {
 		Text    string `xml:",chardata"`
 		Domanda []struct {
-			Text    string `xml:",chardata"`
-			Tipo    string `xml:"tipo,attr"`
-			Opzioni struct {
+			Text      string `xml:",chardata"`
+			IDdomanda string `xml:"id,attr"`
+			Tipo      string `xml:"tipo,attr"`
+			Opzioni   struct {
 				Text    string   `xml:",chardata"`
 				Opzione []string `xml:"opzione"`
 			} `xml:"opzioni"`
@@ -32,5 +33,5 @@ type Utente struct {
 	Cognome   string
 	Mail      string
 	Surveys   []Survey
-	Riposte   []string
+	Risposte  [][]string
 }
