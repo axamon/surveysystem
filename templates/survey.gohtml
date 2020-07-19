@@ -27,12 +27,13 @@
 
     {{ if (eq .Tipo "libera") }}
         <li>{{.Text}}</li>
-        <input type="textarea" id="textarea" name={{.IDdomanda}}>
+        <input type="textarea" id="textarea" name={{.IDdomanda}} value="ND" required>
     {{end}}
 
     {{ if (eq .Tipo "multipla") }}
         <li>{{.Text}}</li>
         <select name={{.IDdomanda}} id="elementi" multiple>
+        <option value="ND" selected="selected">ND</option>
         {{range $indexr, $value := .Opzioni.Opzione}}
              <option value={{$value}}>{{$value}}</option>
         {{end}}
