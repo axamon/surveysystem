@@ -18,6 +18,10 @@ import (
 var csvlock sync.RWMutex
 
 func survey(w http.ResponseWriter, r *http.Request) {
+	tmpl := template.Must(template.ParseFiles("templates/logout.gohtml",
+		"templates/error.gohtml",
+		"templates/footer.gohtml",
+		"templates/survey.gohtml"))
 
 	switch r.Method {
 	case "GET":
@@ -25,7 +29,6 @@ func survey(w http.ResponseWriter, r *http.Request) {
 		session, _ := store.Get(r, "surveyCTIO")
 		// Check if user is authenticated
 		if auth, ok := session.Values["authenticated"].(bool); !ok || !auth {
-			tmpl := template.Must(template.ParseFiles("templates/error.gohtml"))
 			err := tmpl.Execute(w, nil)
 			if err != nil {
 				log.Println(err)
@@ -34,7 +37,6 @@ func survey(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 		// Se autenticato...
-		tmpl := template.Must(template.ParseFiles("templates/survey.gohtml"))
 
 		data, err := ioutil.ReadFile("surveys/primo.xml")
 		if err != nil {
@@ -74,7 +76,6 @@ func survey(w http.ResponseWriter, r *http.Request) {
 			log.Fatal(err)
 		}
 
-		tmpl := template.Must(template.ParseFiles("templates/logout.gohtml"))
 		err = tmpl.Execute(w, nil)
 		if err != nil {
 			log.Println(err)
