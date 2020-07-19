@@ -1,3 +1,5 @@
+// Package ldaplogin enables to check if users and password
+// match on LDAP server database.
 package ldaplogin
 
 import (

@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"log"
 	"net/http"
+	"strings"
 
 	"survey/ldaplogin"
 
@@ -88,6 +89,7 @@ func login(w http.ResponseWriter, r *http.Request) {
 			session.Values["matricola"] = matricola
 			session.Values["utente"] = nomeCognome
 		}
+		// Allows Admin to enter without LDAP authentication
 		if matricola == "Admin" {
 			session.Values["authenticated"] = true
 			session.Values["matricola"] = "Admin"
@@ -96,7 +98,6 @@ func login(w http.ResponseWriter, r *http.Request) {
 		}
 		session.Save(r, w)
 		r.Method = "GET"
-		//http.Redirect(w, r, "/survey", http.StatusTemporaryRedirect)
 		survey(w, r)
 	default:
 		fmt.Fprintf(w, "Sorry, only POST method is supported.")
@@ -105,6 +106,9 @@ func login(w http.ResponseWriter, r *http.Request) {
 
 func middleware(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		if strings.Contains(r.URL.String(), "static") {
+			return
+		}
 		session, _ := store.Get(r, "surveyCTIO")
 		// Check if user is authenticated
 		if auth, ok := session.Values["authenticated"].(bool); !ok || !auth {

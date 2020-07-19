@@ -25,7 +25,12 @@ func survey(w http.ResponseWriter, r *http.Request) {
 		session, _ := store.Get(r, "surveyCTIO")
 		// Check if user is authenticated
 		if auth, ok := session.Values["authenticated"].(bool); !ok || !auth {
-			http.Error(w, "Autenticazione errata o assente.", http.StatusForbidden)
+			tmpl := template.Must(template.ParseFiles("templates/error.gohtml"))
+			err := tmpl.Execute(w, nil)
+			if err != nil {
+				log.Println(err)
+			}
+			// http.Error(w, "Autenticazione errata o assente.", http.StatusForbidden)
 			return
 		}
 		// Se autenticato...
