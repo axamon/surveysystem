@@ -2,7 +2,6 @@ package ldaplogin
 
 import (
 	"fmt"
-	"log"
 
 	"github.com/go-ldap/ldap"
 )
@@ -13,21 +12,14 @@ var LDAPURL = "ldap://directory.cww.telecomitalia.it:389"
 // LDAPBASE è lo starting point per la ricerca.
 var LDAPBASE = "OU=Telecomitalia,O=Telecom Italia Group"
 
-// ldapconn è la sessione da utilizzare per la ricerca su LDAP.
-var ldapconn *ldap.Conn
-
-func init() {
-	// Apre una connessione con LDAP aziendale.
-	l, err := ldap.DialURL(LDAPURL)
-	if err != nil {
-		// ! Se non riesce esce con errore.
-		log.Fatal("Impossibile connettersi a LDAP: ", err)
-	}
-	ldapconn = l
-}
-
 // IsOK verifica se le credenziali passate sono accettate.
 func IsOK(username, password string) (bool, string, error) {
+
+	ldapconn, err := ldap.DialURL(LDAPURL)
+	if err != nil {
+		// ! Se non riesce logga l'errore.
+		return false, "", fmt.Errorf("Impossibile connettersi a LDAP: %v", err)
+	}
 
 	// searchRequest è la richista da inviare al server LDAP.
 	searchRequest := ldap.NewSearchRequest(

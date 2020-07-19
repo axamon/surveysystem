@@ -3,7 +3,6 @@ package main
 import (
 	"encoding/csv"
 	"encoding/xml"
-	"errors"
 	"fmt"
 	"io/ioutil"
 	"log"
@@ -52,6 +51,12 @@ func survey(w http.ResponseWriter, r *http.Request) {
 			log.Println(err)
 		}
 
+		var fileCSV = "surveyID" + note.ID + ".csv"
+		err = createFileCsv(fileCSV, len(note.Domande.Domanda))
+		if err != nil {
+			log.Printf("csv crearion in error: impossibile creare file csv: %s\n", fileCSV)
+		}
+
 	case "POST":
 		// Call ParseForm() to parse the raw query and update r.PostForm and r.Form.
 		if err := r.ParseForm(); err != nil {
@@ -78,14 +83,8 @@ func survey(w http.ResponseWriter, r *http.Request) {
 func writeToCSV(data map[string][]string) error {
 	csvlock.Lock()
 	defer csvlock.Unlock()
-	var fileCSV = "surveyID" + strings.Join(data["surveyID"], "") + ".csv"
 
-	err := createFileCsv(fileCSV)
-
-	if err != nil {
-		return errors.New("csv crearion in error: impossibile creare file csv")
-	}
-
+	fileCSV := "surveyID" + strings.Join(data["surveyID"], "") + ".csv"
 	f, err := os.OpenFile(fileCSV, os.O_APPEND|os.O_WRONLY, os.ModeAppend)
 	if err != nil {
 		return err
@@ -96,9 +95,11 @@ func writeToCSV(data map[string][]string) error {
 	defer csvwriter.Flush()
 
 	var record []string
-	for i := 1; i <= len(data); i++ {
+	for i := 1; i < len(data)-2; i++ {
 		if v, ok := data[strconv.Itoa(i)]; ok {
 			record = append(record, strings.Join(v, ","))
+		} else {
+			record = append(record, "")
 		}
 	}
 	matricola := "\"" + strings.Join(data["matricola"], "") + "\""
@@ -122,7 +123,7 @@ func writeToCSV(data map[string][]string) error {
 	return nil
 }
 
-func createFileCsv(path string) error {
+func createFileCsv(path string, fields int) error {
 	// detect if file exists
 	var _, err = os.Stat(path)
 
@@ -138,8 +139,18 @@ func createFileCsv(path string) error {
 			return err
 		}
 		defer f.Close()
-		csvheader := []string{"#timestamp", "filename", "id", "titolo", "V", "N", "Guiraud", "hapax%", "italianwords%", "sigle"}
+
+		var csvheader []string
+		for i := 0; i < fields; i++ {
+			if i == 0 {
+				csvheader = append(csvheader, "#Domanda"+strconv.Itoa(i+1))
+				continue
+			}
+			csvheader = append(csvheader, "Domanda"+strconv.Itoa(i+1))
+		}
+		csvheader = append(csvheader, "timestamp", "matricola")
 		w := csv.NewWriter(f)
+		w.Comma = ';'
 		w.Write(csvheader)
 		w.Flush()
 
