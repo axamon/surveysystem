@@ -8,8 +8,6 @@ import (
 	"net/http"
 	"strings"
 
-	"survey/ldaplogin"
-
 	"github.com/gorilla/sessions"
 )
 
@@ -34,73 +32,6 @@ func main() {
 	err := http.ListenAndServe(*address, mux)
 	if err != nil {
 		log.Fatal(err)
-	}
-}
-
-func logout(w http.ResponseWriter, r *http.Request) {
-	session, err := store.Get(r, "surveyCTIO")
-	if err != nil {
-		log.Println(err)
-	}
-	// Revoke users authentication
-	session.Values["authenticated"] = false
-	session.Options.MaxAge = -1
-	err = session.Save(r, w)
-	if err != nil {
-		log.Println(err)
-	}
-	log.Printf("Logout effettuato per %s", session.Values["utente"].(string))
-	// w.Write([]byte("Logout effettuato\n"))
-	// time.Sleep(2 * time.Second)
-	r.Method = "GET"
-	http.Redirect(w, r, "/", http.StatusFound)
-}
-
-func login(w http.ResponseWriter, r *http.Request) {
-	session, err := store.Get(r, "surveyCTIO")
-	if err != nil {
-		log.Println(err)
-	}
-
-	switch r.Method {
-	case "GET":
-		survey(w, r)
-	case "POST":
-		// Call ParseForm() to parse the raw query and update r.PostForm and r.Form.
-		if err := r.ParseForm(); err != nil {
-			fmt.Fprintf(w, "ParseForm() err: %v", err)
-			return
-		}
-		//fmt.Fprintf(w, "Post from website! r.PostFrom = %v\n", r.PostForm)
-
-		matricola := r.FormValue("username")
-		password := r.FormValue("password")
-
-		ok, nomeCognome, err := ldaplogin.IsOK(matricola, password)
-		if err != nil {
-			//http.Redirect(w, r, "/login", 301)
-			log.Println(err)
-		}
-		// ripulisci passoword
-		password = "******"
-		// Set user as authenticated
-		if ok {
-			session.Values["authenticated"] = true
-			session.Values["matricola"] = matricola
-			session.Values["utente"] = nomeCognome
-		}
-		// Allows Admin to enter without LDAP authentication
-		if matricola == "Admin" {
-			session.Values["authenticated"] = true
-			session.Values["matricola"] = "Admin"
-			session.Values["utente"] = "Admin"
-
-		}
-		session.Save(r, w)
-		r.Method = "GET"
-		survey(w, r)
-	default:
-		fmt.Fprintf(w, "Sorry, only POST method is supported.")
 	}
 }
 

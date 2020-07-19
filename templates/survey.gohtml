@@ -8,7 +8,9 @@
 <h1>{{.Titolo}}</h1>
 <h3>Inizio: {{.Inizio}} Fine: {{.Fine}}</h3>
 <h3>Ciao {{.Utente}},</h3>
-
+<div class="image" >
+<img src="Questions.jpg" width=25%/>
+</div>
 <div>
 <form method="POST" action="/survey">
 <input type="hidden" id="surveyID" name="surveyID" value={{.ID}}>
