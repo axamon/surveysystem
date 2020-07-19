@@ -17,27 +17,30 @@ import (
 
 var csvlock sync.RWMutex
 
+var logoutTmpl = template.Must(template.ParseFiles("templates/logout.gohtml", "templates/footer.gohtml"))
+
+var errTmpl = template.Must(template.ParseFiles("templates/error.gohtml", "templates/footer.gohtml"))
+
+var surveyTmpl = template.Must(template.ParseFiles("templates/survey.gohtml", "templates/footer.gohtml"))
+
 func survey(w http.ResponseWriter, r *http.Request) {
-	tmpl := template.Must(template.ParseFiles("templates/logout.gohtml",
-		"templates/error.gohtml",
-		"templates/footer.gohtml",
-		"templates/survey.gohtml"))
 
 	switch r.Method {
-	case "GET":
 
+	case "GET":
 		session, _ := store.Get(r, "surveyCTIO")
+
 		// Check if user is authenticated
 		if auth, ok := session.Values["authenticated"].(bool); !ok || !auth {
-			err := tmpl.Execute(w, nil)
+			err := errTmpl.Execute(w, nil)
 			if err != nil {
 				log.Println(err)
 			}
 			// http.Error(w, "Autenticazione errata o assente.", http.StatusForbidden)
 			return
 		}
-		// Se autenticato...
 
+		// Se autenticato...
 		data, err := ioutil.ReadFile("surveys/primo.xml")
 		if err != nil {
 			log.Println(err)
@@ -53,15 +56,18 @@ func survey(w http.ResponseWriter, r *http.Request) {
 		fine, _ := time.Parse("20060102", note.Fine)
 		note.Inizio = inizio.Format("2006-01-02")
 		note.Fine = fine.Format("2006-01-02")
-		err = tmpl.Execute(w, note)
-		if err != nil {
-			log.Println(err)
-		}
 
+		// Create file csv.
 		var fileCSV = "surveyID" + note.ID + ".csv"
 		err = createFileCsv(fileCSV, len(note.Domande.Domanda))
 		if err != nil {
 			log.Printf("csv crearion in error: impossibile creare file csv: %s\n", fileCSV)
+		}
+
+		// Serve template
+		err = surveyTmpl.Execute(w, note)
+		if err != nil {
+			log.Println(err)
 		}
 
 	case "POST":
@@ -76,7 +82,7 @@ func survey(w http.ResponseWriter, r *http.Request) {
 			log.Fatal(err)
 		}
 
-		err = tmpl.Execute(w, nil)
+		err = logoutTmpl.Execute(w, nil)
 		if err != nil {
 			log.Println(err)
 		}
