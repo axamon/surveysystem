@@ -17,13 +17,12 @@ import (
 
 var csvlock sync.RWMutex
 
-var logoutTmpl = template.Must(template.ParseFiles("templates/logout.gohtml", "templates/footer.gohtml"))
-
-var errTmpl = template.Must(template.ParseFiles("templates/error.gohtml", "templates/footer.gohtml"))
-
-var surveyTmpl = template.Must(template.ParseFiles("templates/survey.gohtml", "templates/footer.gohtml"))
-
 func survey(w http.ResponseWriter, r *http.Request) {
+	var logoutTmpl = template.Must(template.ParseFiles("templates/logout.gohtml", "templates/footer.gohtml"))
+
+	var errTmpl = template.Must(template.ParseFiles("templates/error.gohtml", "templates/footer.gohtml"))
+
+	var surveyTmpl = template.Must(template.ParseFiles("templates/survey.gohtml", "templates/footer.gohtml"))
 
 	switch r.Method {
 

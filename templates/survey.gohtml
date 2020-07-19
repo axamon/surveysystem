@@ -6,7 +6,7 @@
 <body>
 {{$name := .}}
 <h1>{{.Titolo}}</h1>
-<h2>Inizio: {{.Inizio}} Fine: {{.Fine}}</h2>
+<h3>Inizio: {{.Inizio}} Fine: {{.Fine}}</h3>
 <h3>Ciao {{.Utente}},</h3>
 
 <div>
@@ -14,7 +14,7 @@
 <input type="hidden" id="surveyID" name="surveyID" value={{.ID}}>
 <input type="hidden" id="utente" name="utente" value={{.Utente}}>
 <input type="hidden" id="matricola" name="matricola" value={{.Matricola}}>
-<ul>
+<ol>
 {{range $index, $value := .Domande.Domanda}}
 
     {{ if (eq .Tipo "booleana") }}
@@ -43,7 +43,7 @@
 
 {{end}}
  <input type="submit" value="Invia">
-</ul>
+</ol>
 </form>
 </div>
 {{template "footer"}}

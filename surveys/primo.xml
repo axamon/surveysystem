@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<survey id="1" titolo="Esempio Survey Process Adoption" inizio="20200714" fine="20200717">
+<survey id="1" titolo="Esempio Survey Process Adoption" inizio="20200720" fine="20200724">
 <domande>
     <domanda id="1" tipo="booleana">Conosci il significato di Waterfall in ambito processi di sviluppo SW?</domanda>
     <domanda id="2" tipo="booleana">Conosci il significato di Agile in ambito processi di sviluppo SW?</domanda>
