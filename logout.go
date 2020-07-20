@@ -25,8 +25,7 @@ func logout(w http.ResponseWriter, r *http.Request) {
 		}
 
 	}
-	// w.Write([]byte("Logout effettuato\n"))
-	// time.Sleep(2 * time.Second)
+
 	err = logoutTmpl.Execute(w, nil)
 	if err != nil {
 		log.Println(err)

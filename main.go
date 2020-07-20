@@ -7,6 +7,7 @@ import (
 	"log"
 	"net/http"
 	"strings"
+	"text/template"
 
 	"github.com/gorilla/sessions"
 )
@@ -25,6 +26,7 @@ func main() {
 	mux := http.NewServeMux()
 	fs := http.FileServer(http.Dir("./static"))
 	mux.Handle("/", fs)
+	mux.HandleFunc("/index", index)
 	mux.HandleFunc("/login", login)
 	mux.HandleFunc("/logout", logout)
 	mux.HandleFunc("/survey", survey)
@@ -32,6 +34,15 @@ func main() {
 	err := http.ListenAndServe(*address, mux)
 	if err != nil {
 		log.Fatal(err)
+	}
+}
+
+func index(w http.ResponseWriter, r *http.Request) {
+	var indexTmpl = template.Must(template.ParseFiles("templates/index.gohtml", "templates/footer.gohtml"))
+
+	err := indexTmpl.Execute(w, nil)
+	if err != nil {
+		log.Println(err)
 	}
 }
 
