@@ -5,12 +5,28 @@ import (
 	"flag"
 	"fmt"
 	"log"
+	"os"
 	"net/http"
 	"strings"
-	"text/template"
+	"html/template"
 
+	"github.com/gorilla/handlers"
+	// "github.com/gorilla/mux"
 	"github.com/gorilla/sessions"
 )
+
+var templates map[string]*template.Template
+
+//Compile view templates
+func init() {
+	if templates == nil {
+		templates=make(map[string]*template.Template)
+	}
+	templates["index"]=template.Must(template.ParseFiles("templates/index.gohtml", "templates/footer.gohtml"))
+	templates["login"]=template.Must(template.ParseFiles("templates/index.gohtml", "templates/footer.gohtml"))
+	templates["logout"]=template.Must(template.ParseFiles("templates/logout2.gohtml", "templates/footer.gohtml"))
+	templates["survey"]=template.Must(template.ParseFiles("templates/survey.gohtml", "templates/footer.gohtml"))
+}
 
 var (
 	// key must be 16, 24 or 32 bytes long (AES-128, AES-192 or AES-256)
@@ -23,15 +39,19 @@ func main() {
 	var address = flag.String("addr", ":8080", "Server address")
 	flag.Parse()
 
-	mux := http.NewServeMux()
+	r := http.NewServeMux()
+	//r := mux.NewRouter()
+	
 	fs := http.FileServer(http.Dir("./static"))
-	mux.Handle("/", fs)
-	mux.HandleFunc("/index", index)
-	mux.HandleFunc("/login", login)
-	mux.HandleFunc("/logout", logout)
-	mux.HandleFunc("/survey", survey)
+	r.Handle("/static/", http.StripPrefix("/static/", fs))
+	//r.Handle("/static/", fs)
+	r.HandleFunc("/", index)
+	r.HandleFunc("/login", login)
+	r.HandleFunc("/logout", logout)
+	r.HandleFunc("/survey", survey)
 
-	err := http.ListenAndServe(*address, mux)
+	loggedRouter := handlers.LoggingHandler(os.Stdout, r)
+	err := http.ListenAndServe(*address, loggedRouter)
 	if err != nil {
 		log.Fatal(err)
 	}
