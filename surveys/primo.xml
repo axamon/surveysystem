@@ -1,20 +1,22 @@
 <?xml version="1.0"?>
-<survey id="1" titolo="Esempio Survey Process Adoption" inizio="20200720" fine="20200724">
+<survey id="1" titolo="Cyber Security Process Adoption" inizio="20200721" fine="20200731" video="https://web.microsoftstream.com/embed/video/4c88d6fb-f9ad-4ca1-9a4e-4d51cf77e5f7?autoplay=false&amp;showinfo=true">
 <domande>
-    <domanda id="1" tipo="booleana">Conosci il significato di Waterfall in ambito processi di sviluppo SW?</domanda>
-    <domanda id="2" tipo="booleana">Conosci il significato di Agile in ambito processi di sviluppo SW?</domanda>
-    <domanda id="3" tipo="booleana">Hai partecipato a progetti gestiti in modalità Waterfall?</domanda>
-    <domanda id="4" tipo="booleana">Hai partecipato a progetti gestiti in modalità Agile?</domanda>
-    <domanda id="5" tipo="booleana">Hai partecipato a progetti gestiti in modalità Waterfall?"</domanda>
-    <domanda id="6" tipo="libera">Elenca i processi che hai seguito in modalità Waterfall</domanda>
-    <domanda id="7" tipo="libera">Elenca i processi che hai seguito in modalità Agile</domanda>
-    <domanda id="8" tipo="multipla">Quali di questi concetti fanno parte del medodo Agile
+    <domanda idDomanda="1" tipo="libera">Quanti sono i capisaldi del sistema Crisis Management di TIM?</domanda>
+    <domanda idDomanda="2" tipo="booleana">Aumentare la resilienza è uno degli obiettivi della procedura?</domanda>
+    <domanda idDomanda="3" tipo="booleana">La pianificazione rientra nelle 4 fasi del Crisis Management di TIM?</domanda>
+    <domanda idDomanda="4" tipo="libera">Da quante funzioni è composto l'Operationa Crisis Team in CTIO?</domanda>
+    <domanda idDomanda="5" tipo="libera">Che livello di gravità viene assegnato a un evento critico?</domanda>
+    <domanda idDomanda="6" tipo="booleana">L'OCT deve occuparsi anche delle relazioni con i social media?"</domanda>
+    <domanda idDomanda="7" tipo="libera">Massimo quante ore sono previste da KPI per l'attivazione operativa?</domanda>
+    <domanda idDomanda="8" tipo="multipla">Quali sono gli attori che partecipano al processo?
         <opzioni>
-            <opzione>Scrum</opzione>
-            <opzione>Sprint</opzione>
-            <opzione>Kanban</opzione>
-            <opzione>Iso 20000</opzione>
-            <opzione>muda</opzione>
+            <opzione>Operationl Crisis Team</opzione>
+            <opzione>Crisis Chief</opzione>
+            <opzione>CEO</opzione>
+            <opzione>Security Operation Center</opzione>
+            <opzione>Tutte le strutture di 2° livello</opzione>
+            <opzione>Crisis Management</opzione>
+            <opzione>Crisis Managemen Committee</opzione>
         </opzioni>
     </domanda>
 </domande>

@@ -23,7 +23,7 @@ func survey(w http.ResponseWriter, r *http.Request) {
 		if err != nil {
 			log.Println(err)
 		}
-		note := &Survey{}
+		note := &Survey2{}
 		err = xml.Unmarshal([]byte(data), &note)
 		if err != nil {
 			log.Println(err)
