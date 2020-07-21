@@ -7,6 +7,8 @@ import (
 	"survey/ldaplogin"
 )
 
+// login serve a gestire e verificare l'autenicazione e
+// autorizzazione utente.
 func login(w http.ResponseWriter, r *http.Request) {
 	session, err := store.Get(r, "surveyCTIO")
 	if err != nil {
@@ -14,8 +16,7 @@ func login(w http.ResponseWriter, r *http.Request) {
 	}
 
 	switch r.Method {
-	case "GET":
-		survey(w, r)
+
 	case "POST":
 		// Call ParseForm() to parse the raw query and update r.PostForm and r.Form.
 		if err := r.ParseForm(); err != nil {
@@ -32,7 +33,7 @@ func login(w http.ResponseWriter, r *http.Request) {
 			//http.Redirect(w, r, "/login", 301)
 			log.Println(err)
 		}
-		// ripulisci passoword
+		// ripulisce la passoword per non farla girare
 		password = "******"
 		// Set user as authenticated
 		if ok {
@@ -40,7 +41,7 @@ func login(w http.ResponseWriter, r *http.Request) {
 			session.Values["matricola"] = matricola
 			session.Values["utente"] = nomeCognome
 		}
-		// Allows Admin to enter without LDAP authentication
+		// permette ad "Admin" di entrare senza verifica LDAP.
 		if matricola == "Admin" {
 			session.Values["authenticated"] = true
 			session.Values["matricola"] = "Admin"
@@ -49,8 +50,9 @@ func login(w http.ResponseWriter, r *http.Request) {
 		}
 		session.Save(r, w)
 		r.Method = "GET"
+		r.RequestURI = "/survey"
 		survey(w, r)
 	default:
-		fmt.Fprintf(w, "Sorry, only POST method is supported.")
+		http.Error(w, "Metodo non permesso", http.StatusMethodNotAllowed)
 	}
 }

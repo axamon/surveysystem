@@ -13,24 +13,12 @@ import (
 
 func survey(w http.ResponseWriter, r *http.Request) {
 	var logoutTmpl = template.Must(template.ParseFiles("templates/logout.gohtml", "templates/header.gohtml", "templates/footer.gohtml"))
-	var errTmpl = template.Must(template.ParseFiles("templates/error.gohtml", "templates/header.gohtml", "templates/footer.gohtml"))
 	var surveyTmpl = template.Must(template.ParseFiles("templates/survey.gohtml", "templates/header.gohtml", "templates/footer.gohtml"))
 
 	switch r.Method {
 
 	case "GET":
 		session, _ := store.Get(r, "surveyCTIO")
-
-		// Se l'utente non è autenticato...
-		if auth, ok := session.Values["authenticated"].(bool); !ok || !auth {
-			err := errTmpl.Execute(w, nil)
-			if err != nil {
-				log.Println(err)
-			}
-			return
-		}
-
-		// Se l'utente si è autenticato...
 		data, err := ioutil.ReadFile("surveys/primo.xml")
 		if err != nil {
 			log.Println(err)
@@ -69,7 +57,7 @@ func survey(w http.ResponseWriter, r *http.Request) {
 
 		err := writeToCSV(r.Form)
 		if err != nil {
-			log.Fatal(err)
+			log.Println(err)
 		}
 
 		err = logoutTmpl.Execute(w, nil)
@@ -78,6 +66,6 @@ func survey(w http.ResponseWriter, r *http.Request) {
 		}
 
 	default:
-		fmt.Fprintf(w, "Sorry, only GET and POST methods are supported.")
+		http.Error(w, "Metodo non permesso", http.StatusMethodNotAllowed)
 	}
 }

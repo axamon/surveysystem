@@ -46,7 +46,7 @@ func main() {
 	r.HandleFunc("/logout", logout)
 	r.HandleFunc("/survey", survey)
 
-	loggedRouter := handlers.LoggingHandler(os.Stdout, r)
+	loggedRouter := handlers.LoggingHandler(os.Stdout, middleware(r))
 	err := http.ListenAndServe(*address, loggedRouter)
 	if err != nil {
 		log.Fatal(err)

@@ -1,21 +1,36 @@
 package main
 
 import (
+	"html/template"
+	"log"
 	"net/http"
-	"strings"
 )
+
+var errTmpl = template.Must(template.ParseFiles("templates/error.gohtml", "templates/header.gohtml", "templates/footer.gohtml"))
 
 func middleware(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		if strings.Contains(r.URL.String(), "static") {
+
+		switch r.URL.RequestURI() {
+		case "/survey":
+			session, err := store.Get(r, "surveyCTIO")
+			if err != nil {
+				log.Println(err)
+			}
+			// Se l'utente non è autenticato restituisce il template errore.
+			if auth, ok := session.Values["authenticated"].(bool); !ok || !auth {
+				w.WriteHeader(http.StatusForbidden)
+				err := errTmpl.Execute(w, nil)
+				if err != nil {
+					log.Println(err)
+				}
+				return
+			}
+
+			fallthrough
+		default:
+			next.ServeHTTP(w, r)
 			return
 		}
-		session, _ := store.Get(r, "surveyCTIO")
-		// Check if user is authenticated
-		if auth, ok := session.Values["authenticated"].(bool); !ok || !auth {
-			http.Error(w, "vietato", http.StatusForbidden)
-			return
-		}
-		next.ServeHTTP(w, r)
 	})
 }
