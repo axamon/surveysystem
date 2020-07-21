@@ -1,24 +1,15 @@
 <!DOCTYPE html>
 <html>
-<head>
-    <link rel="stylesheet" href="/static/styles.css">
-    <style>
-    body {
-  background-image: url('/static/Questions.jpg');
-  background-repeat: no-repeat;
-   background-attachment: fixed;  
-  background-size: 50%;
-  background-position: right;
-  }
-  </style>
-
-</head>
+{{template "header"}}
 <body>
-{{$name := .}}
+<title>{{.Titolo}}</title>
 <h1>{{.Titolo}}</h1>
 <h3>Inizio: {{.Inizio}} Fine: {{.Fine}}</h3>
 <h3>Ciao {{.Utente}},</h3>
 
+<div class="questions" >
+<img src="/static/Questions.jpg" style="width:40%;position:fixed;right:4px;top:10px;z-index:-5"/>
+</div>
 <div>
 <form method="POST" action="/survey">
 <input type="hidden" id="surveyID" name="surveyID" value={{.ID}}>

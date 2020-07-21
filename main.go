@@ -22,10 +22,10 @@ func init() {
 	if templates == nil {
 		templates=make(map[string]*template.Template)
 	}
-	templates["index"]=template.Must(template.ParseFiles("templates/index.gohtml", "templates/footer.gohtml"))
-	templates["login"]=template.Must(template.ParseFiles("templates/index.gohtml", "templates/footer.gohtml"))
-	templates["logout"]=template.Must(template.ParseFiles("templates/logout2.gohtml", "templates/footer.gohtml"))
-	templates["survey"]=template.Must(template.ParseFiles("templates/survey.gohtml", "templates/footer.gohtml"))
+	templates["index"]=template.Must(template.ParseFiles("templates/header.gohtml","templates/index.gohtml", "templates/footer.gohtml"))
+	templates["login"]=template.Must(template.ParseFiles("templates/header.gohtml","templates/index.gohtml", "templates/footer.gohtml"))
+	templates["logout"]=template.Must(template.ParseFiles("templates/header.gohtml","templates/logout2.gohtml", "templates/footer.gohtml"))
+	templates["survey"]=template.Must(template.ParseFiles("templates/header.gohtml","templates/survey.gohtml", "templates/footer.gohtml"))
 }
 
 var (
@@ -48,7 +48,7 @@ func main() {
 	r.HandleFunc("/", index)
 	r.HandleFunc("/login", login)
 	r.HandleFunc("/logout", logout)
-	r.HandleFunc("/survey", survey)
+	r.HandleFunc("/survey", survey)	
 
 	loggedRouter := handlers.LoggingHandler(os.Stdout, r)
 	err := http.ListenAndServe(*address, loggedRouter)
@@ -58,8 +58,8 @@ func main() {
 }
 
 func index(w http.ResponseWriter, r *http.Request) {
-	var indexTmpl = template.Must(template.ParseFiles("templates/index.gohtml", "templates/footer.gohtml"))
-
+	var indexTmpl = template.Must(template.ParseFiles("templates/index.gohtml","templates/header.gohtml", "templates/footer.gohtml"))
+	// err :=templates["index"].Execute(w, nil)
 	err := indexTmpl.Execute(w, nil)
 	if err != nil {
 		log.Println(err)

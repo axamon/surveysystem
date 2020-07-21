@@ -31,3 +31,18 @@ body {
     padding: 0.2rem;
     cursor: pointer;
     }
+.questions {
+    right: 3px;
+    position: fixed;     
+    text-align: center;    
+    bottom: 2px; 
+    width: 100%;
+    font-size: xx-small;
+}
+.blah{
+    background-image: url('/static/Questions.jpg');
+    background-repeat: no-repeat;
+    background-attachment: fixed;  
+    background-size: 50%;
+    background-position: right;
+}
