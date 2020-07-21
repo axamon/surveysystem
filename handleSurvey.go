@@ -12,7 +12,7 @@ import (
 )
 
 func survey(w http.ResponseWriter, r *http.Request) {
-	var logoutTmpl = template.Must(template.ParseFiles("templates/logout.gohtml", "templates/header.gohtml", "templates/footer.gohtml"))
+	var grazieTmpl = template.Must(template.ParseFiles("templates/grazie.gohtml", "templates/header.gohtml", "templates/footer.gohtml"))
 	var surveyTmpl = template.Must(template.ParseFiles("templates/survey.gohtml", "templates/header.gohtml", "templates/footer.gohtml"))
 
 	switch r.Method {
@@ -60,7 +60,7 @@ func survey(w http.ResponseWriter, r *http.Request) {
 			log.Println(err)
 		}
 
-		err = logoutTmpl.Execute(w, nil)
+		err = grazieTmpl.Execute(w, nil)
 		if err != nil {
 			log.Println(err)
 		}

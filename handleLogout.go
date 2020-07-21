@@ -9,7 +9,7 @@ import (
 func logout(w http.ResponseWriter, r *http.Request) {
 	switch r.Method {
 	case "GET":
-		var logoutTmpl = template.Must(template.ParseFiles("templates/logout2.gohtml", "templates/header.gohtml", "templates/footer.gohtml"))
+		var logoutTmpl = template.Must(template.ParseFiles("templates/logout.gohtml", "templates/header.gohtml", "templates/footer.gohtml"))
 
 		session, err := store.Get(r, "surveyCTIO")
 		if err != nil {

@@ -22,7 +22,7 @@ func init() {
 	}
 	templates["index"] = template.Must(template.ParseFiles("templates/index.gohtml", "templates/header.gohtml", "templates/footer.gohtml"))
 	templates["login"] = template.Must(template.ParseFiles("templates/index.gohtml", "templates/header.gohtml", "templates/footer.gohtml"))
-	templates["logout"] = template.Must(template.ParseFiles("templates/logout2.gohtml", "templates/header.gohtml", "templates/footer.gohtml"))
+	templates["logout"] = template.Must(template.ParseFiles("templates/logout.gohtml", "templates/header.gohtml", "templates/footer.gohtml"))
 	templates["survey"] = template.Must(template.ParseFiles("templates/survey.gohtml", "templates/header.gohtml", "templates/footer.gohtml"))
 }
 
