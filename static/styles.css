@@ -10,6 +10,11 @@ body {
     font-size: xx-large;
     font-style: bold;
     font-family: Arial, sans-serif;
+    color: #333333;
+    background: #FFFFFF;
+    text-shadow: 2px 2px 0px #FFFFFF, 5px 4px 0px rgba(0,0,0,0.15);
+    color: #333333;
+    background: lightblue;
   }
 .image{ 
     position: fixed;
@@ -38,11 +43,4 @@ body {
     bottom: 2px; 
     width: 100%;
     font-size: xx-small;
-}
-.blah{
-    background-image: url('/static/Questions.jpg');
-    background-repeat: no-repeat;
-    background-attachment: fixed;  
-    background-size: 50%;
-    background-position: right;
 }
