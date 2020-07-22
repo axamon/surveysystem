@@ -8,6 +8,8 @@ import (
 	"log"
 	"net/http"
 	"os"
+	"os/exec"
+	"runtime"
 
 	"github.com/gorilla/handlers"
 	"github.com/gorilla/sessions"
@@ -37,6 +39,24 @@ func main() {
 	var address = flag.String("addr", ":8080", "Server address")
 	flag.Parse()
 
+	var url = "http://127.0.0.1" + *address
+	var err error
+
+	switch runtime.GOOS {
+
+	case "linux":
+		err = exec.Command("xdg-open", url).Start()
+	case "windows":
+		err = exec.Command("rundll32", "url.dll,FileProtocolHandler", url).Start()
+	case "darwin":
+		err = exec.Command("open", url).Start()
+	default:
+		err = fmt.Errorf("unsupported platform")
+	}
+	if err != nil {
+		log.Fatal(err)
+	}
+
 	r := http.NewServeMux()
 
 	fs := http.FileServer(http.Dir("./static"))
@@ -47,7 +67,7 @@ func main() {
 	r.HandleFunc("/survey", survey)
 
 	loggedRouter := handlers.LoggingHandler(os.Stdout, middleware(r))
-	err := http.ListenAndServe(*address, loggedRouter)
+	err = http.ListenAndServe(*address, loggedRouter)
 	if err != nil {
 		log.Fatal(err)
 	}
