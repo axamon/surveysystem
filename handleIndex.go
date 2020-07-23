@@ -1,7 +1,6 @@
 package main
 
 import (
-	"html/template"
 	"log"
 	"net/http"
 )
@@ -11,12 +10,10 @@ func index(w http.ResponseWriter, r *http.Request) {
 	switch r.Method {
 
 	case "GET":
-		var indexTmpl = template.Must(template.ParseFiles(
-			"templates/index.gohtml",
-			"templates/header.gohtml",
-			"templates/footer.gohtml"))
+
+		//var indexTmpl =
 		// err :=templates["index"].Execute(w, nil)
-		err := indexTmpl.Execute(w, nil)
+		err := templates.ExecuteTemplate(w, "index.gohtml", nil)
 		if err != nil {
 			log.Println(err)
 		}

@@ -11,21 +11,17 @@ import (
 	"os/exec"
 	"runtime"
 
+	"github.com/gobuffalo/packr"
 	"github.com/gorilla/handlers"
 	"github.com/gorilla/sessions"
 )
 
-var templates map[string]*template.Template
+var templates *template.Template
+var templatefs = packr.NewBox("./templates")
 
 // Compila i templates e li inserisce nella mappa templates.
 func init() {
-	if templates == nil {
-		templates = make(map[string]*template.Template)
-	}
-	templates["index"] = template.Must(template.ParseFiles("templates/index.gohtml", "templates/header.gohtml", "templates/footer.gohtml"))
-	templates["login"] = template.Must(template.ParseFiles("templates/index.gohtml", "templates/header.gohtml", "templates/footer.gohtml"))
-	templates["logout"] = template.Must(template.ParseFiles("templates/logout.gohtml", "templates/header.gohtml", "templates/footer.gohtml"))
-	templates["survey"] = template.Must(template.ParseFiles("templates/survey.gohtml", "templates/header.gohtml", "templates/footer.gohtml"))
+	templates = template.Must(template.ParseGlob("./templates/*.gohtml"))
 }
 
 var (
@@ -34,6 +30,8 @@ var (
 	key   = []byte(fmt.Sprint(rand.Read(token)))
 	store = sessions.NewCookieStore(key)
 )
+
+var staticfs = packr.NewBox("./static")
 
 func main() {
 	var address = flag.String("addr", ":8080", "Server address")
@@ -59,7 +57,8 @@ func main() {
 
 	r := http.NewServeMux()
 
-	fs := http.FileServer(http.Dir("./static"))
+	// fs := http.FileServer(http.Dir("./static"))
+	fs := http.FileServer(staticfs)
 	r.Handle("/static/", http.StripPrefix("/static/", fs))
 	r.HandleFunc("/", index)
 	r.HandleFunc("/login", login)
@@ -71,4 +70,26 @@ func main() {
 	if err != nil {
 		log.Fatal(err)
 	}
+}
+
+// ParseInternalTemplate parses templates that are not stored on filesyste.
+func ParseInternalTemplate(t *template.Template, data ...InternalTemplate) (*template.Template, error) {
+
+	for _, internalTemp := range data {
+		var tmpl *template.Template
+		if t == nil {
+			t = template.New(internalTemp.Name)
+		}
+		var name string
+		if name == t.Name() {
+			tmpl = t
+		} else {
+			tmpl = t.New(internalTemp.Name)
+		}
+		_, err := tmpl.Parse(internalTemp.Text)
+		if err != nil {
+			return nil, err
+		}
+	}
+	return t, nil
 }

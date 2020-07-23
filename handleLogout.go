@@ -1,7 +1,6 @@
 package main
 
 import (
-	"html/template"
 	"log"
 	"net/http"
 )
@@ -9,7 +8,6 @@ import (
 func logout(w http.ResponseWriter, r *http.Request) {
 	switch r.Method {
 	case "GET":
-		var logoutTmpl = template.Must(template.ParseFiles("templates/logout.gohtml", "templates/header.gohtml", "templates/footer.gohtml"))
 
 		session, err := store.Get(r, "surveyCTIO")
 		if err != nil {
@@ -28,7 +26,7 @@ func logout(w http.ResponseWriter, r *http.Request) {
 
 		}
 
-		err = logoutTmpl.Execute(w, nil)
+		err = templates.ExecuteTemplate(w, "logout.gohtml", nil)
 		if err != nil {
 			log.Println(err)
 		}

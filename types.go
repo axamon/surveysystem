@@ -59,3 +59,10 @@ type Utente struct {
 	Surveys   []Survey
 	Risposte  [][]string
 }
+
+// InternalTemplate è usato per templates
+// che non esistono sul filesytem.
+type InternalTemplate struct {
+	Name string
+	Text string
+}
