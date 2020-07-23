@@ -59,3 +59,8 @@ type Utente struct {
 	Surveys   []Survey
 	Risposte  [][]string
 }
+
+type InternalTemplate struct {
+	Name string
+	Text string
+}

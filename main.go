@@ -19,10 +19,24 @@ var templates *template.Template
 
 // Compila i templates e li inserisce nella mappa templates.
 func init() {
-	templates = template.Must(template.ParseFiles(_filePath("templates", "index.gohtml"),
-		_filePath("templates", "header.gohtml"),
-		_filePath("templates", "footer.gohtml"),
-		_filePath("templates", "survey.gohtml"))) // "./templates/*.gohtml"))
+	o, _ := templatesIndexGohtml()
+	i := InternalTemplate{Name: "index.gohtml", Text: string(o.bytes)}
+	o, _ = templatesHeaderGohtml()
+	h := InternalTemplate{Name: "header.gohtml", Text: string(o.bytes)}
+	o, _ = templatesFooterGohtml()
+	f := InternalTemplate{Name: "footer.gohtml", Text: string(o.bytes)}
+	o, _ = templatesGrazieGohtml()
+	g := InternalTemplate{Name: "grazie.gohtml", Text: string(o.bytes)}
+	o, _ = templatesErrorGohtml()
+	e := InternalTemplate{Name: "error.gohtml", Text: string(o.bytes)}
+	o, _ = templatesSurveyGohtml()
+	s := InternalTemplate{Name: "survey.gohtml", Text: string(o.bytes)}
+	o, _ = templatesLogoutGohtml()
+	l := InternalTemplate{Name: "logout.gohtml", Text: string(o.bytes)}
+
+	t := template.New("surveysystem")
+	templates = template.Must(ParseInternalTemplate(t, i, h, f, g, e, s, l))
+
 }
 
 var (
@@ -72,4 +86,25 @@ func main() {
 	if err != nil {
 		log.Fatal(err)
 	}
+}
+
+func ParseInternalTemplate(t *template.Template, data ...InternalTemplate) (*template.Template, error) {
+
+	for _, internalTemp := range data {
+		var tmpl *template.Template
+		if t == nil {
+			t = template.New(internalTemp.Name)
+		}
+		var name string
+		if name == t.Name() {
+			tmpl = t
+		} else {
+			tmpl = t.New(internalTemp.Name)
+		}
+		_, err := tmpl.Parse(internalTemp.Text)
+		if err != nil {
+			return nil, err
+		}
+	}
+	return t, nil
 }

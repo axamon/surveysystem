@@ -1,7 +1,6 @@
 package main
 
 import (
-	"html/template"
 	"log"
 	"net/http"
 )
@@ -9,7 +8,7 @@ import (
 func middleware(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 
-		templates = template.Must(template.ParseGlob(_filePath("templates", "*.gohtml")))
+		//templates = template.Must(template.ParseGlob(_filePath("templates", "*.gohtml")))
 
 		//var errTmpl = template.Must(template.ParseFiles("templates/error.gohtml", "templates/header.gohtml", "templates/footer.gohtml"))
 

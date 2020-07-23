@@ -3,7 +3,6 @@ package main
 import (
 	"encoding/xml"
 	"fmt"
-	"io/ioutil"
 	"log"
 	"net/http"
 	"strings"
@@ -16,10 +15,12 @@ func survey(w http.ResponseWriter, r *http.Request) {
 
 	case "GET":
 		session, _ := store.Get(r, "surveyCTIO")
-		data, err := ioutil.ReadFile("surveys/primo.xml")
+		o, err := staticPrimoXml()
 		if err != nil {
 			log.Println(err)
 		}
+		data := o.bytes // ioutil.ReadFile("surveys/primo.xml")
+
 		note := &Survey2{}
 		err = xml.Unmarshal([]byte(data), &note)
 		if err != nil {
