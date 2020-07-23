@@ -3,7 +3,6 @@ package main
 import (
 	"encoding/xml"
 	"fmt"
-	"html/template"
 	"io/ioutil"
 	"log"
 	"net/http"
@@ -12,8 +11,6 @@ import (
 )
 
 func survey(w http.ResponseWriter, r *http.Request) {
-	var grazieTmpl = template.Must(template.ParseFiles("templates/grazie.gohtml", "templates/header.gohtml", "templates/footer.gohtml"))
-	var surveyTmpl = template.Must(template.ParseFiles("templates/survey.gohtml", "templates/header.gohtml", "templates/footer.gohtml"))
 
 	switch r.Method {
 
@@ -43,7 +40,7 @@ func survey(w http.ResponseWriter, r *http.Request) {
 		}
 
 		// Serve template
-		err = surveyTmpl.Execute(w, note)
+		err = templates.ExecuteTemplate(w, "survey.gohtml", note)
 		if err != nil {
 			log.Println(err)
 		}
@@ -60,7 +57,7 @@ func survey(w http.ResponseWriter, r *http.Request) {
 			log.Println(err)
 		}
 
-		err = grazieTmpl.Execute(w, nil)
+		err = templates.ExecuteTemplate(w, "grazie.gohtml", nil)
 		if err != nil {
 			log.Println(err)
 		}

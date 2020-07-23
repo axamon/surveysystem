@@ -46,7 +46,6 @@ func login(w http.ResponseWriter, r *http.Request) {
 			session.Values["authenticated"] = true
 			session.Values["matricola"] = "Admin"
 			session.Values["utente"] = "Admin"
-
 		}
 		session.Save(r, w)
 		r.Method = "GET"

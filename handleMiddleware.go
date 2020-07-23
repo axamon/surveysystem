@@ -6,10 +6,12 @@ import (
 	"net/http"
 )
 
-var errTmpl = template.Must(template.ParseFiles("templates/error.gohtml", "templates/header.gohtml", "templates/footer.gohtml"))
-
 func middleware(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+
+		templates = template.Must(template.ParseGlob(_filePath("templates", "*.gohtml")))
+
+		//var errTmpl = template.Must(template.ParseFiles("templates/error.gohtml", "templates/header.gohtml", "templates/footer.gohtml"))
 
 		switch r.URL.RequestURI() {
 		case "/survey":
@@ -20,7 +22,7 @@ func middleware(next http.Handler) http.Handler {
 			// Se l'utente non è autenticato restituisce il template errore.
 			if auth, ok := session.Values["authenticated"].(bool); !ok || !auth {
 				w.WriteHeader(http.StatusForbidden)
-				err := errTmpl.Execute(w, nil)
+				err := templates.ExecuteTemplate(w, "index.gohtml", nil)
 				if err != nil {
 					log.Println(err)
 				}

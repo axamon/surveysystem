@@ -15,17 +15,14 @@ import (
 	"github.com/gorilla/sessions"
 )
 
-var templates map[string]*template.Template
+var templates *template.Template
 
 // Compila i templates e li inserisce nella mappa templates.
 func init() {
-	if templates == nil {
-		templates = make(map[string]*template.Template)
-	}
-	templates["index"] = template.Must(template.ParseFiles("templates/index.gohtml", "templates/header.gohtml", "templates/footer.gohtml"))
-	templates["login"] = template.Must(template.ParseFiles("templates/index.gohtml", "templates/header.gohtml", "templates/footer.gohtml"))
-	templates["logout"] = template.Must(template.ParseFiles("templates/logout.gohtml", "templates/header.gohtml", "templates/footer.gohtml"))
-	templates["survey"] = template.Must(template.ParseFiles("templates/survey.gohtml", "templates/header.gohtml", "templates/footer.gohtml"))
+	templates = template.Must(template.ParseFiles(_filePath("templates", "index.gohtml"),
+		_filePath("templates", "header.gohtml"),
+		_filePath("templates", "footer.gohtml"),
+		_filePath("templates", "survey.gohtml"))) // "./templates/*.gohtml"))
 }
 
 var (
@@ -41,6 +38,12 @@ func main() {
 
 	var url = "http://127.0.0.1" + *address
 	var err error
+
+	for i, a := range AssetNames() {
+		fmt.Println(i, a)
+	}
+
+	a, err := templatesLogoutGohtml()
 
 	switch runtime.GOOS {
 
@@ -59,8 +62,8 @@ func main() {
 
 	r := http.NewServeMux()
 
-	fs := http.FileServer(http.Dir("./static"))
-	r.Handle("/static/", http.StripPrefix("/static/", fs))
+	fs := http.FileServer(AssetFile()) // http.Dir("./static"))
+	r.Handle("/static/", fs)           // http.StripPrefix("/static/", fs))
 	r.HandleFunc("/", index)
 	r.HandleFunc("/login", login)
 	r.HandleFunc("/logout", logout)
