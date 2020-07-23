@@ -43,8 +43,6 @@ func main() {
 		fmt.Println(i, a)
 	}
 
-	a, err := templatesLogoutGohtml()
-
 	switch runtime.GOOS {
 
 	case "linux":
