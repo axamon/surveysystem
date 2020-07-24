@@ -60,6 +60,7 @@ type Utente struct {
 	Risposte  [][]string
 }
 
+// InternalTemplate are templates made from embedded data.
 type InternalTemplate struct {
 	Name string
 	Text string
