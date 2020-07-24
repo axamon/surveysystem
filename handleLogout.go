@@ -3,6 +3,7 @@ package main
 import (
 	"log"
 	"net/http"
+	"os"
 )
 
 func logout(w http.ResponseWriter, r *http.Request) {
@@ -30,6 +31,7 @@ func logout(w http.ResponseWriter, r *http.Request) {
 		if err != nil {
 			log.Println(err)
 		}
+		os.Exit(0)
 	default:
 		http.Error(w, "Metodo non permesso", http.StatusMethodNotAllowed)
 	}
