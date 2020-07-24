@@ -15,6 +15,10 @@ func login(w http.ResponseWriter, r *http.Request) {
 		log.Println(err)
 	}
 
+	// forza l'autenticazione a false
+	session.Values["authenticated"] = false
+	session.Save(r, w)
+
 	switch r.Method {
 
 	case "POST":
@@ -48,9 +52,21 @@ func login(w http.ResponseWriter, r *http.Request) {
 			session.Values["utente"] = "Admin"
 		}
 		session.Save(r, w)
-		r.Method = "GET"
-		r.RequestURI = "/survey"
-		survey(w, r)
+
+		if session.Values["authenticated"].(bool) {
+
+			err = templates.ExecuteTemplate(w, "login.gohtml", nil)
+			if err != nil {
+				log.Println(err)
+			}
+
+		} else {
+			err = templates.ExecuteTemplate(w, "error.gohtml", nil)
+			if err != nil {
+				log.Println(err)
+			}
+		}
+
 	default:
 		http.Error(w, "Metodo non permesso", http.StatusMethodNotAllowed)
 	}
