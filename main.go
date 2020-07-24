@@ -33,9 +33,11 @@ func init() {
 	s := InternalTemplate{Name: "survey.gohtml", Text: string(o.bytes)}
 	o, _ = templatesLogoutGohtml()
 	l := InternalTemplate{Name: "logout.gohtml", Text: string(o.bytes)}
+	o, _ = templatesLoginGohtml()
+	li := InternalTemplate{Name: "login.gohtml", Text: string(o.bytes)}
 
 	t := template.New("surveysystem")
-	templates = template.Must(ParseInternalTemplate(t, i, h, f, g, e, s, l))
+	templates = template.Must(ParseInternalTemplate(t, i, h, f, g, e, s, l, li))
 
 }
 
@@ -88,6 +90,7 @@ func main() {
 	}
 }
 
+// ParseInternalTemplate parsa i template senza recuperarli da file.
 func ParseInternalTemplate(t *template.Template, data ...InternalTemplate) (*template.Template, error) {
 
 	for _, internalTemp := range data {
