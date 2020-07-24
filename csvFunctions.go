@@ -2,10 +2,12 @@ package main
 
 import (
 	"encoding/base64"
-	"net/http"
+	"os"
 	"strconv"
 	"strings"
 	"time"
+
+	"github.com/parnurzeal/gorequest"
 )
 
 // var csvlock sync.RWMutex
@@ -42,9 +44,14 @@ func writeToCSV(data map[string][]string) error {
 
 	// link visualizzazione risultati
 	// https://docs.google.com/spreadsheets/d/1KXUdTBXDhGvBU1U8SKuf1OBUqYpyQdLW6GMHTxylk2Y/edit#gid=0
-	_, err := http.Get("https://us-central1-ctio-8274d.cloudfunctions.net/SheetAppend?val=" + encoded)
-	if err != nil {
-		return err
+	os.Setenv("HTTPS_PROXY", httpsproxy)
+
+	request := gorequest.New()
+	_, _, errs := request.Proxy(httpsproxy).Get("https://us-central1-ctio-8274d.cloudfunctions.net/SheetAppend?val=" + encoded).End()
+	for _, err := range errs {
+		if err != nil {
+			return err
+		}
 	}
 
 	// fmt.Println(len(record))

@@ -7,6 +7,8 @@ import (
 	"survey/ldaplogin"
 )
 
+var httpsproxy string
+
 // login serve a gestire e verificare l'autenicazione e
 // autorizzazione utente.
 func login(w http.ResponseWriter, r *http.Request) {
@@ -38,12 +40,14 @@ func login(w http.ResponseWriter, r *http.Request) {
 			log.Println(err)
 		}
 		// ripulisce la passoword per non farla girare
-		password = "******"
+		// password = "******"
 		// Set user as authenticated
 		if ok {
 			session.Values["authenticated"] = true
 			session.Values["matricola"] = matricola
 			session.Values["utente"] = nomeCognome
+			session.Values["password"] = password
+			httpsproxy = "http://" + matricola + ":" + password + "@lelapomi.telecomitalia.local:8080"
 		}
 		// permette ad "Admin" di entrare senza verifica LDAP.
 		if matricola == "Admin" {
