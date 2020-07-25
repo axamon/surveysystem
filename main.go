@@ -17,6 +17,8 @@ import (
 
 var templates *template.Template
 
+//go:generate go-bindata -fs static templates
+
 // Compila i templates e li inserisce nella mappa templates.
 func init() {
 	o, _ := templatesIndexGohtml()
@@ -55,9 +57,24 @@ func main() {
 	var url = "http://127.0.0.1" + *address
 	var err error
 
-	for i, a := range AssetNames() {
-		fmt.Println(i, a)
-	}
+	// t := template.New("surveysystem")
+	// var internals []InternalTemplate
+	// for i, name := range AssetNames() {
+
+	// 	if strings.Contains(name, "gohtml") {
+	// 		var internal InternalTemplate
+	// 		body, err := Asset(name)
+	// 		if err != nil {
+	// 			log.Println(err)
+	// 		}
+	// 		internal.Name = name
+	// 		internal.Text = string(body)
+	// 		internals = append(internals, internal)
+	// 		fmt.Println(i, name, string(body))
+
+	// 	}
+	// }
+	// templates = template.Must(ParseInternalTemplate(t, internals))
 
 	switch runtime.GOOS {
 
