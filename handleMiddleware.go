@@ -8,10 +8,6 @@ import (
 func middleware(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 
-		//templates = template.Must(template.ParseGlob(_filePath("templates", "*.gohtml")))
-
-		//var errTmpl = template.Must(template.ParseFiles("templates/error.gohtml", "templates/header.gohtml", "templates/footer.gohtml"))
-
 		switch r.URL.RequestURI() {
 		case "/survey":
 			session, err := store.Get(r, "surveyCTIO")

@@ -91,7 +91,6 @@ func istantiateInternalTemplates() {
 		if !strings.Contains(asset, "gohtml") {
 			continue
 		}
-		log.Println(asset)
 		details, err := AssetInfo(asset)
 		if err != nil {
 			log.Println(err)

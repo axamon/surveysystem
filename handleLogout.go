@@ -7,8 +7,8 @@ import (
 
 func logout(w http.ResponseWriter, r *http.Request) {
 	switch r.Method {
-	case "GET":
 
+	case "GET":
 		session, err := store.Get(r, "surveyCTIO")
 		if err != nil {
 			log.Println(err)
