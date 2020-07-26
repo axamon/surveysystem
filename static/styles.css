@@ -39,8 +39,8 @@ body {
 .questions {
     right: 3px;
     position: fixed;     
-    text-align: center;    
+    text-align: right;    
     bottom: 2px; 
-    width: 90%;
+    width: auto;
     font-size: xx-small;
 }

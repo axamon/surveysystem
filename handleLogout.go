@@ -30,6 +30,7 @@ func logout(w http.ResponseWriter, r *http.Request) {
 		if err != nil {
 			log.Println(err)
 		}
+
 	default:
 		http.Error(w, "Metodo non permesso", http.StatusMethodNotAllowed)
 	}

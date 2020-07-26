@@ -26,6 +26,7 @@ type Survey struct {
 	} `xml:"domande"`
 }
 
+// Survey2 è la struttura in cui parsare le domande
 type Survey2 struct {
 	Utente    string
 	Matricola string
@@ -58,10 +59,4 @@ type Utente struct {
 	Mail      string
 	Surveys   []Survey
 	Risposte  [][]string
-}
-
-// InternalTemplate are templates made from embedded data.
-type InternalTemplate struct {
-	Name string
-	Text string
 }

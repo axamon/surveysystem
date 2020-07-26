@@ -63,7 +63,6 @@ func IsOK(username, password string) (bool, string, error) {
 		goto ERR
 	}
 
-	return true, usercn, nil
 ERR:
-	return false, "", err
+	return err == nil, usercn, err
 }

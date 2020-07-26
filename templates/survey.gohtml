@@ -10,7 +10,7 @@
 <div class="questions" >
 {{/* <img src="/static/Questions.jpg" style="width:35%;position:fixed;right:4px;top:10px;z-index:-5"/> */}}
 </div>
-<iframe style="position:fixed;right:4px;top:10px" width="500" height="360" src={{.Video}} allowfullscreen></iframe>
+<iframe style="position:fixed;right:4px;top:10px; z-index:-1;" width="500" height="360" src={{.Video}} allowfullscreen></iframe>
 <div>
 <form method="POST" action="/survey">
 <input type="hidden" id="surveyID" name="surveyID" value={{.ID}}>
