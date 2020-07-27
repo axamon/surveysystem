@@ -1,12 +1,18 @@
 package main
 
 import (
+	"context"
 	"log"
 	"net/http"
+	"time"
 )
 
 func middleware(next http.Handler) http.Handler {
+
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+
+		ctx, cancel := context.WithTimeout(r.Context(), 200*time.Millisecond)
+		defer cancel()
 
 		switch r.URL.RequestURI() {
 		case "/survey":
@@ -22,6 +28,10 @@ func middleware(next http.Handler) http.Handler {
 					log.Println(err)
 				}
 				return
+			}
+			select {
+			case <-ctx.Done():
+				log.Printf("Took too long to serve %s: %v\n", r.RequestURI, ctx.Err())
 			}
 
 			fallthrough
