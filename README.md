@@ -13,7 +13,10 @@ L'accesso è basato su LDAP aziendale.
 
 # setta icona per versione exe
     rsrc -ico YOUR_ICON_FILE_NAME.ico
-# Build
 
+# installare go-bindata
+    go get -u github.com/go-bindata/go-bindata/...
+
+# Build
     go generate
     go build
