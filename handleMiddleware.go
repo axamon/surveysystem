@@ -36,6 +36,7 @@ func middleware(next http.Handler) http.Handler {
 
 			fallthrough
 		default:
+			w.Header().Set("Cache-Control", "no-store, no-cache, must-revalidate, post-check=0, pre-check=0")
 			next.ServeHTTP(w, r)
 			return
 		}

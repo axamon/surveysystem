@@ -9,6 +9,7 @@
 // static/styles.css
 // static/survey.jpg
 // templates/error.gohtml
+// templates/exit.gohtml
 // templates/footer.gohtml
 // templates/grazie.gohtml
 // templates/header.gohtml
@@ -315,7 +316,7 @@ func staticStylesCss() (*asset, error) {
 		return nil, err
 	}
 
-	info := bindataFileInfo{name: "static/styles.css", size: 882, mode: os.FileMode(420), modTime: time.Unix(1595681514, 0)}
+	info := bindataFileInfo{name: "static/styles.css", size: 882, mode: os.FileMode(420), modTime: time.Unix(1595849126, 0)}
 	a := &asset{bytes: bytes, info: info}
 	return a, nil
 }
@@ -356,6 +357,26 @@ func templatesErrorGohtml() (*asset, error) {
 	}
 
 	info := bindataFileInfo{name: "templates/error.gohtml", size: 267, mode: os.FileMode(420), modTime: time.Unix(1595616168, 0)}
+	a := &asset{bytes: bytes, info: info}
+	return a, nil
+}
+
+var _templatesExitGohtml = []byte("\x1f\x8b\x08\x00\x00\x00\x00\x00\x00\xff\xb2\x51\x74\xf1\x77\x0e\x89\x0c\x70\x55\xc8\x28\xc9\xcd\xb1\xe3\xb2\x81\x50\xd5\xd5\x25\xa9\xb9\x05\x39\x89\x25\xa9\x0a\x4a\x19\xa9\x89\x29\xa9\x45\x4a\xb5\xb5\x5c\x36\x25\x99\x25\x39\xa9\x76\xae\x15\x99\x25\x36\xfa\x10\x36\x97\x4d\x52\x7e\x4a\x25\x48\x9f\xb1\x9d\x63\x41\x81\x42\x2a\x58\x2e\xc3\x18\x24\x62\x62\x17\x5a\x9c\x9c\x59\x92\xa8\x90\x92\xa8\x10\x5c\x5a\x54\x96\x5a\x19\x5c\x92\x58\x92\x99\x9f\x67\xa3\x9f\x61\x02\xd2\x59\x64\xc7\xa5\xa0\xa0\xa0\x80\x6c\x59\x5a\x7e\x7e\x09\xd4\x32\x7d\xa8\xc9\xfa\x60\x27\x01\x02\x00\x00\xff\xff\x78\x85\xcf\x3c\xa9\x00\x00\x00")
+
+func templatesExitGohtmlBytes() ([]byte, error) {
+	return bindataRead(
+		_templatesExitGohtml,
+		"templates/exit.gohtml",
+	)
+}
+
+func templatesExitGohtml() (*asset, error) {
+	bytes, err := templatesExitGohtmlBytes()
+	if err != nil {
+		return nil, err
+	}
+
+	info := bindataFileInfo{name: "templates/exit.gohtml", size: 169, mode: os.FileMode(420), modTime: time.Unix(1595849926, 0)}
 	a := &asset{bytes: bytes, info: info}
 	return a, nil
 }
@@ -455,12 +476,12 @@ func templatesLoginGohtml() (*asset, error) {
 		return nil, err
 	}
 
-	info := bindataFileInfo{name: "templates/login.gohtml", size: 353, mode: os.FileMode(420), modTime: time.Unix(1595696955, 0)}
+	info := bindataFileInfo{name: "templates/login.gohtml", size: 353, mode: os.FileMode(420), modTime: time.Unix(1595849126, 0)}
 	a := &asset{bytes: bytes, info: info}
 	return a, nil
 }
 
-var _templatesLogoutGohtml = []byte("\x1f\x8b\x08\x00\x00\x00\x00\x00\x00\xff\x4c\x8f\x3d\x8b\xc3\x30\x0c\x86\x77\xff\x0a\x9d\xe1\xd6\xd3\x71\x59\x15\x2f\x77\x07\x1d\x0a\xed\xd0\xa5\xa3\x9b\xc8\xb1\xc1\xae\x83\xa3\x50\x4a\xc8\x7f\x2f\xf9\x18\x3a\x09\xf1\x48\x2f\xcf\x4b\x1f\x7f\xa7\xdf\xcb\xf5\xfc\x0f\x5e\x52\x34\x8a\xb6\x31\x4d\xc2\xa9\x8f\x56\x18\xb4\x67\xdb\x72\xd1\xf3\xac\x48\x82\x44\x36\xc7\xdc\xe5\x51\x08\xb7\x4d\xd1\x2d\xb7\xcf\xe5\xb3\xda\x09\xb0\x73\x2c\x32\x5a\xc9\x84\xbe\x32\x8a\x42\xea\x60\x28\x4d\xad\x71\x10\x2b\xa1\xc1\xb8\x1e\x7e\xf5\xf7\x4e\xc3\x23\xb4\xe2\xeb\x9f\xef\x4f\xc0\x25\xac\x18\x05\x00\x40\x16\x7c\x61\x57\x6b\xd4\xe6\x90\x13\x13\xda\x0d\xbc\xab\xb9\x9c\x65\x57\xc3\xdd\x02\xd7\x02\xaf\x00\x00\x00\xff\xff\xc8\x19\xb9\xe6\xd7\x00\x00\x00")
+var _templatesLogoutGohtml = []byte("\x1f\x8b\x08\x00\x00\x00\x00\x00\x00\xff\x4c\x8f\xbb\x4e\xc6\x30\x0c\x46\xf7\x3c\x85\x89\xc4\x08\x46\x74\x75\xb3\x40\x25\x06\x24\x18\x58\x18\x43\xeb\x34\x91\x12\x52\xa5\xae\x28\xaa\xfa\xee\xbf\x7a\x19\x3a\x59\xf6\xe7\x63\x1d\xd3\xdd\xeb\xc7\xcb\xd7\xf7\x67\x03\x5e\x52\x34\x8a\x8e\xb2\x2c\xc2\x69\x88\x56\x18\xb4\x67\xdb\x71\xd1\xeb\xaa\x48\x82\x44\x36\xef\xb9\xcf\x93\x10\x1e\x9d\xa2\x9f\xdc\xfd\x6f\x64\x75\x26\xc0\xce\xb1\xc8\x64\x25\x13\xfa\xca\x28\x0a\xa9\x87\xb1\xb4\xb5\xc6\x51\xac\x84\x16\xe3\xbe\xf8\x38\xfc\xf6\x1a\xfe\x42\x27\xbe\x7e\x7e\xba\x07\xdc\x8e\x15\xa3\x00\x00\xc8\x82\x2f\xec\x6a\x8d\xda\xbc\xe5\xc4\x84\xd6\xc0\xc3\x65\xcc\x73\x10\x6d\x9a\x39\xc8\x16\xed\xcc\xd5\xda\xe5\x2c\xa7\x35\x9e\x82\xb8\xff\x76\x0b\x00\x00\xff\xff\x52\xa8\x25\x10\xf2\x00\x00\x00")
 
 func templatesLogoutGohtmlBytes() ([]byte, error) {
 	return bindataRead(
@@ -475,7 +496,7 @@ func templatesLogoutGohtml() (*asset, error) {
 		return nil, err
 	}
 
-	info := bindataFileInfo{name: "templates/logout.gohtml", size: 215, mode: os.FileMode(420), modTime: time.Unix(1595382322, 0)}
+	info := bindataFileInfo{name: "templates/logout.gohtml", size: 242, mode: os.FileMode(420), modTime: time.Unix(1595849431, 0)}
 	a := &asset{bytes: bytes, info: info}
 	return a, nil
 }
@@ -495,7 +516,7 @@ func templatesSurveyGohtml() (*asset, error) {
 		return nil, err
 	}
 
-	info := bindataFileInfo{name: "templates/survey.gohtml", size: 1658, mode: os.FileMode(420), modTime: time.Unix(1595682195, 0)}
+	info := bindataFileInfo{name: "templates/survey.gohtml", size: 1658, mode: os.FileMode(420), modTime: time.Unix(1595849126, 0)}
 	a := &asset{bytes: bytes, info: info}
 	return a, nil
 }
@@ -561,6 +582,7 @@ var _bindata = map[string]func() (*asset, error){
 	"static/styles.css":       staticStylesCss,
 	"static/survey.jpg":       staticSurveyJpg,
 	"templates/error.gohtml":  templatesErrorGohtml,
+	"templates/exit.gohtml":   templatesExitGohtml,
 	"templates/footer.gohtml": templatesFooterGohtml,
 	"templates/grazie.gohtml": templatesGrazieGohtml,
 	"templates/header.gohtml": templatesHeaderGohtml,
@@ -623,6 +645,7 @@ var _bintree = &bintree{nil, map[string]*bintree{
 	}},
 	"templates": &bintree{nil, map[string]*bintree{
 		"error.gohtml":  &bintree{templatesErrorGohtml, map[string]*bintree{}},
+		"exit.gohtml":   &bintree{templatesExitGohtml, map[string]*bintree{}},
 		"footer.gohtml": &bintree{templatesFooterGohtml, map[string]*bintree{}},
 		"grazie.gohtml": &bintree{templatesGrazieGohtml, map[string]*bintree{}},
 		"header.gohtml": &bintree{templatesHeaderGohtml, map[string]*bintree{}},
