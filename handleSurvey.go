@@ -33,13 +33,6 @@ func survey(w http.ResponseWriter, r *http.Request) {
 		note.Inizio = inizio.Format("2006-01-02")
 		note.Fine = fine.Format("2006-01-02")
 
-		// Crea file csv.
-		// var fileCSV = "surveyID" + note.ID + ".csv"
-		// err = createFileCsv(fileCSV, len(note.Domande.Domanda))
-		// if err != nil {
-		// 	log.Printf("csv crearion in error: impossibile creare file csv: %s\n", fileCSV)
-		// }
-
 		// Serve template
 		err = templates.ExecuteTemplate(w, "survey.gohtml", note)
 		if err != nil {

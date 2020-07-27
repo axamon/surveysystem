@@ -3,13 +3,12 @@ package main
 import (
 	"log"
 	"net/http"
-	"os"
 )
 
 func logout(w http.ResponseWriter, r *http.Request) {
 	switch r.Method {
-	case "GET":
 
+	case "GET":
 		session, err := store.Get(r, "surveyCTIO")
 		if err != nil {
 			log.Println(err)
@@ -31,7 +30,6 @@ func logout(w http.ResponseWriter, r *http.Request) {
 		if err != nil {
 			log.Println(err)
 		}
-		os.Exit(0)
 	default:
 		http.Error(w, "Metodo non permesso", http.StatusMethodNotAllowed)
 	}

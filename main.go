@@ -1,6 +1,7 @@
 package main
 
 import (
+	"context"
 	"crypto/rand"
 	"flag"
 	"fmt"
@@ -10,55 +11,47 @@ import (
 	"os"
 	"os/exec"
 	"runtime"
+	"strings"
+	"time"
 
 	"github.com/gorilla/handlers"
 	"github.com/gorilla/sessions"
 )
 
 var templates *template.Template
+var store *sessions.CookieStore
 
-// Compila i templates e li inserisce nella mappa templates.
+//go:generate go-bindata -fs static templates
+
 func init() {
-	o, _ := templatesIndexGohtml()
-	i := InternalTemplate{Name: "index.gohtml", Text: string(o.bytes)}
-	o, _ = templatesHeaderGohtml()
-	h := InternalTemplate{Name: "header.gohtml", Text: string(o.bytes)}
-	o, _ = templatesFooterGohtml()
-	f := InternalTemplate{Name: "footer.gohtml", Text: string(o.bytes)}
-	o, _ = templatesGrazieGohtml()
-	g := InternalTemplate{Name: "grazie.gohtml", Text: string(o.bytes)}
-	o, _ = templatesErrorGohtml()
-	e := InternalTemplate{Name: "error.gohtml", Text: string(o.bytes)}
-	o, _ = templatesSurveyGohtml()
-	s := InternalTemplate{Name: "survey.gohtml", Text: string(o.bytes)}
-	o, _ = templatesLogoutGohtml()
-	l := InternalTemplate{Name: "logout.gohtml", Text: string(o.bytes)}
-	o, _ = templatesLoginGohtml()
-	li := InternalTemplate{Name: "login.gohtml", Text: string(o.bytes)}
-
-	t := template.New("surveysystem")
-	templates = template.Must(ParseInternalTemplate(t, i, h, f, g, e, s, l, li))
-
+	// Compila i templates e li inserisce nella mappa templates.
+	go istantiateInternalTemplates()
+	// key must be 16, 24 or 32 bytes long (AES-128, AES-192 or AES-256)
+	token := make([]byte, 32)
+	key := []byte(fmt.Sprint(rand.Read(token)))
+	store = sessions.NewCookieStore(key)
 }
 
-var (
-	// key must be 16, 24 or 32 bytes long (AES-128, AES-192 or AES-256)
-	token = make([]byte, 32)
-	key   = []byte(fmt.Sprint(rand.Read(token)))
-	store = sessions.NewCookieStore(key)
-)
-
 func main() {
-	var address = flag.String("addr", ":8080", "Server address")
+	ctx, cancel := context.WithTimeout(context.Background(), 30*time.Minute)
+	defer cancel()
+
+	go func() {
+		<-ctx.Done()
+		log.Fatal("Timeout")
+	}()
+
+	var (
+		err              error
+		r                *http.ServeMux
+		fs, loggedRouter http.Handler
+		url              string
+		address          *string
+	)
+	address = flag.String("addr", ":8080", "Server address")
 	flag.Parse()
 
-	var url = "http://127.0.0.1" + *address
-	var err error
-
-	for i, a := range AssetNames() {
-		fmt.Println(i, a)
-	}
-
+	url = "http://127.0.0.1" + *address
 	switch runtime.GOOS {
 
 	case "linux":
@@ -74,40 +67,45 @@ func main() {
 		log.Fatal(err)
 	}
 
-	r := http.NewServeMux()
+	r = http.NewServeMux()
 
-	fs := http.FileServer(AssetFile()) // http.Dir("./static"))
-	r.Handle("/static/", fs)           // http.StripPrefix("/static/", fs))
+	fs = http.FileServer(AssetFile()) // http.Dir("./static"))
+	r.Handle("/static/", fs)          // http.StripPrefix("/static/", fs))
 	r.HandleFunc("/", index)
 	r.HandleFunc("/login", login)
 	r.HandleFunc("/logout", logout)
 	r.HandleFunc("/survey", survey)
 
-	loggedRouter := handlers.LoggingHandler(os.Stdout, middleware(r))
+	loggedRouter = handlers.LoggingHandler(os.Stdout, middleware(r))
 	err = http.ListenAndServe(*address, loggedRouter)
 	if err != nil {
 		log.Fatal(err)
 	}
+
 }
 
-// ParseInternalTemplate parsa i template senza recuperarli da file.
-func ParseInternalTemplate(t *template.Template, data ...InternalTemplate) (*template.Template, error) {
+func istantiateInternalTemplates() {
+	t := template.New("surveysystem")
 
-	for _, internalTemp := range data {
-		var tmpl *template.Template
-		if t == nil {
-			t = template.New(internalTemp.Name)
+	for _, asset := range AssetNames() {
+		if !strings.Contains(asset, "gohtml") {
+			continue
 		}
-		var name string
-		if name == t.Name() {
-			tmpl = t
-		} else {
-			tmpl = t.New(internalTemp.Name)
-		}
-		_, err := tmpl.Parse(internalTemp.Text)
+		details, err := AssetInfo(asset)
 		if err != nil {
-			return nil, err
+			log.Println(err)
+		}
+		bytes, err := Asset(details.Name())
+		if err != nil {
+			log.Println(err)
+		}
+		tmpl := t.New(strings.Split(details.Name(), "/")[1])
+		_, err = tmpl.Parse(string(bytes))
+		if err != nil {
+			log.Println(err)
 		}
 	}
-	return t, nil
+
+	templates = t
+	return
 }

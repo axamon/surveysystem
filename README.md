@@ -1,4 +1,5 @@
 # Survey system
+[![Maintainability](https://api.codeclimate.com/v1/badges/988f3974aa0eb7372050/maintainability)](https://codeclimate.com/github/axamon/surveysystem/maintainability)
 
 Serve a creare dei questionari da somministrare ai colleghi.
 
@@ -12,3 +13,7 @@ L'accesso è basato su LDAP aziendale.
 
 # setta icona per versione exe
     rsrc -ico YOUR_ICON_FILE_NAME.ico
+# Build
+
+    go generate
+    go build

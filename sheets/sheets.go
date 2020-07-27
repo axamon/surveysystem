@@ -21,8 +21,6 @@ func SheetAppend(w http.ResponseWriter, r *http.Request) { //sheetID string, val
 
 	sheetID := r.URL.Query().Get("sheetID")
 
-	sheetID = "1KXUdTBXDhGvBU1U8SKuf1OBUqYpyQdLW6GMHTxylk2Y"
-
 	encoded := r.URL.Query().Get("val")
 
 	decoded, err := base64.StdEncoding.DecodeString(encoded)
