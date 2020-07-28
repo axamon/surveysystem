@@ -44,7 +44,7 @@ func writeToCSV(data map[string][]string) error {
 	os.Setenv("HTTPS_PROXY", httpsproxy)
 
 	request := gorequest.New()
-	_, _, errs := request.Proxy(httpsproxy).Get("https://us-central1-ctio-8274d.cloudfunctions.net/SheetAppend?val=" + encoded + "&sheetID=" + sheetID).End()
+	_, _, errs := request.Proxy(httpsproxy).Get("https://us-central1-ctio-8274d.cloudfunctions.net/SheetAppend?val=" + encoded + "&sheetID=" + sheetID + "&foglio=Risposte").End()
 	for _, err := range errs {
 		if err != nil {
 			return err
