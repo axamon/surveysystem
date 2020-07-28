@@ -63,15 +63,14 @@ func login(w http.ResponseWriter, r *http.Request) {
 				log.Println(err)
 			}
 			return
-		} else {
+		}
 
-			note := &Survey2{}
-			note.Utente = strings.Split(session.Values["utente"].(string), " ")[0] // Aggiunge nome utente
+		note := &Survey2{}
+		note.Utente = strings.Split(session.Values["utente"].(string), " ")[0] // Aggiunge nome utente
 
-			err = templates.ExecuteTemplate(w, "login.gohtml", note)
-			if err != nil {
-				log.Println(err)
-			}
+		err = templates.ExecuteTemplate(w, "login.gohtml", note)
+		if err != nil {
+			log.Println(err)
 		}
 
 	default:
