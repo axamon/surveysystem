@@ -110,25 +110,3 @@ func istantiateInternalTemplates() {
 	templates = t
 	return
 }
-
-// ParseInternalTemplate parses templates that are not stored on filesyste.
-func ParseInternalTemplate(t *template.Template, data ...InternalTemplate) (*template.Template, error) {
-
-	for _, internalTemp := range data {
-		var tmpl *template.Template
-		if t == nil {
-			t = template.New(internalTemp.Name)
-		}
-		var name string
-		if name == t.Name() {
-			tmpl = t
-		} else {
-			tmpl = t.New(internalTemp.Name)
-		}
-		_, err := tmpl.Parse(internalTemp.Text)
-		if err != nil {
-			return nil, err
-		}
-	}
-	return t, nil
-}
