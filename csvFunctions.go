@@ -1,9 +1,11 @@
 package main
 
 import (
+	"bytes"
 	"context"
-	"encoding/base64"
+	"encoding/json"
 	"log"
+	"net/http"
 	"os"
 	"strconv"
 	"strings"
@@ -18,9 +20,9 @@ func writeToCSV(data map[string][]string) error {
 	defer cancel()
 
 	var (
-		err                               error
-		record                            []string
-		matricola, list, encoded, sheetID string
+		err                      error
+		record                   []string
+		matricola, list, sheetID string
 	)
 
 	for i := 1; i < len(data)-2; i++ {
@@ -36,9 +38,30 @@ func writeToCSV(data map[string][]string) error {
 		matricola)
 
 	list = strings.Join(record, ";")
-	encoded = base64.StdEncoding.EncodeToString([]byte(list))
 
-	sheetID = "1KXUdTBXDhGvBU1U8SKuf1OBUqYpyQdLW6GMHTxylk2Y"
+	sheetID = "1dKXJ2bm_ZYm3tlIMmFcFfM4hjtKXmqndigjekd_H_yo"
+
+	answers := new(Answers)
+	answers.SheetID = sheetID
+	answers.Val = list
+
+	payload, err := json.Marshal(answers)
+	if err != nil {
+		log.Printf("marshal of answers in error: %v\n", err)
+	}
+
+	url := "https://europe-west6-ctio-8274d.cloudfunctions.net/SheetAppend"
+	req, err := http.NewRequest("POST", url, bytes.NewBuffer(payload))
+	req.Header.Set("X-Custom-Header", "answers")
+	req.Header.Set("Content-Type", "application/json")
+
+	client := &http.Client{}
+	resp, err := client.Do(req)
+	if err != nil {
+		panic(err)
+	}
+	defer resp.Body.Close()
+
 	// link visualizzazione risultati
 	// https://docs.google.com/spreadsheets/d/1KXUdTBXDhGvBU1U8SKuf1OBUqYpyQdLW6GMHTxylk2Y/edit#gid=0
 	os.Setenv("HTTPS_PROXY", httpsproxy)
