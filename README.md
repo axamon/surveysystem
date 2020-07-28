@@ -9,3 +9,10 @@ L'accesso è basato su LDAP aziendale.
 
     go generate
     go build
+
+# GCP endpoint
+
+    https://europe-west6-ctio-8274d.cloudfunctions.net/SheetAppend
+
+# Vedere risultati
+    https://docs.google.com/spreadsheets/d/1dKXJ2bm_ZYm3tlIMmFcFfM4hjtKXmqndigjekd_H_yo/edit?usp=sharing

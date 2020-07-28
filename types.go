@@ -60,3 +60,9 @@ type Utente struct {
 	Surveys   []Survey
 	Risposte  [][]string
 }
+
+// Answers sono le risposte da inviare.
+type Answers struct {
+	SheetID string `json:"sheetID"`
+	Val     string `json:"val"`
+}
