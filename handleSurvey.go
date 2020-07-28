@@ -3,10 +3,6 @@ package main
 import (
 	"encoding/xml"
 	"fmt"
-<<<<<<< HEAD
-	"io/ioutil"
-=======
->>>>>>> b2ff8f323abf46180ced9a5358a03b91dfc82293
 	"log"
 	"net/http"
 	"strings"

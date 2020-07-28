@@ -14,24 +14,14 @@ import (
 	"strings"
 	"time"
 
-	"github.com/gobuffalo/packr"
 	"github.com/gorilla/handlers"
 	"github.com/gorilla/sessions"
 )
 
 var templates *template.Template
-<<<<<<< HEAD
-var templatefs = packr.NewBox("./templates")
-
-// Compila i templates e li inserisce nella mappa templates.
-func init() {
-	templates = template.Must(template.ParseGlob("./templates/*.gohtml"))
-}
-=======
 var store *sessions.CookieStore
 
 //go:generate go-bindata -fs static templates
->>>>>>> b2ff8f323abf46180ced9a5358a03b91dfc82293
 
 func init() {
 	// Compila i templates e li inserisce nella mappa templates.
@@ -41,8 +31,6 @@ func init() {
 	key := []byte(fmt.Sprint(rand.Read(token)))
 	store = sessions.NewCookieStore(key)
 }
-
-var staticfs = packr.NewBox("./static")
 
 func main() {
 	ctx, cancel := context.WithTimeout(context.Background(), 30*time.Minute)
@@ -81,14 +69,8 @@ func main() {
 
 	r = http.NewServeMux()
 
-<<<<<<< HEAD
-	// fs := http.FileServer(http.Dir("./static"))
-	fs := http.FileServer(staticfs)
-	r.Handle("/static/", http.StripPrefix("/static/", fs))
-=======
 	fs = http.FileServer(AssetFile()) // http.Dir("./static"))
 	r.Handle("/static/", fs)          // http.StripPrefix("/static/", fs))
->>>>>>> b2ff8f323abf46180ced9a5358a03b91dfc82293
 	r.HandleFunc("/", index)
 	r.HandleFunc("/login", login)
 	r.HandleFunc("/logout", logout)

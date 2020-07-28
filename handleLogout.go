@@ -7,10 +7,6 @@ import (
 
 func logout(w http.ResponseWriter, r *http.Request) {
 	switch r.Method {
-<<<<<<< HEAD
-	case "GET":
-=======
->>>>>>> b2ff8f323abf46180ced9a5358a03b91dfc82293
 
 	case "GET":
 		session, err := store.Get(r, "surveyCTIO")

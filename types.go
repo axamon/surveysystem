@@ -61,16 +61,9 @@ type Utente struct {
 	Risposte  [][]string
 }
 
-<<<<<<< HEAD
-// InternalTemplate è usato per templates
-// che non esistono sul filesytem.
-type InternalTemplate struct {
-	Name string
-	Text string
-=======
 // Answers sono le risposte da inviare.
 type Answers struct {
 	SheetID string `json:"sheetID"`
+	Foglio  string `json:"foglio"`
 	Val     string `json:"val"`
->>>>>>> b2ff8f323abf46180ced9a5358a03b91dfc82293
 }
