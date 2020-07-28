@@ -2,6 +2,7 @@ package main
 
 import (
 	"context"
+	"html/template"
 	"log"
 	"net/http"
 	"time"
@@ -10,6 +11,7 @@ import (
 func middleware(next http.Handler) http.Handler {
 
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		templates = template.Must(template.ParseGlob("./templates/*.gohtml"))
 
 		ctx, cancel := context.WithTimeout(r.Context(), 200*time.Millisecond)
 		defer cancel()

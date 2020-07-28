@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+{{template "header"}}
+<title>Survey System</title>
+<body>
+
+  <div class="title">SURVEY SYSTEM</div>
+  <br>
+  <br>
+  <img src="/static/survey.jpg"/>
+  <br>
+  <div id="post_form">
+      <form method="POST" action="/login">
+        <ul>     
+          <input class="rounded" name="username" type="text" value="Matricola" />
+        <br>
+          <input class="rounded" name="password" type="password" value="Password" />
+       <br>
+            <input type="submit" value="Accedi" />
+        </ul>
+      </form>
+  </div>
+
+ 
+  {{template "footer"}}
+
+</body>
+</html>
