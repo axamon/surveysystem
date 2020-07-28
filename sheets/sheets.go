@@ -2,7 +2,6 @@ package sheets
 
 import (
 	"context"
-	"encoding/base64"
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
@@ -16,19 +15,100 @@ import (
 	"google.golang.org/api/sheets/v4"
 )
 
+// Answers sono le risposte da inviare.
+type Answers struct {
+	SheetID string `json:"sheetID"`
+	Foglio  string `json:"foglio"`
+	Val     string `json:"val"`
+}
+
 // SheetAppend appends data to a google sheet.
 func SheetAppend(w http.ResponseWriter, r *http.Request) { //sheetID string, val []string) {
 
-	sheetID := r.URL.Query().Get("sheetID")
+	var a Answers
 
-	encoded := r.URL.Query().Get("val")
+	switch r.Method {
+	case "POST":
 
-	decoded, err := base64.StdEncoding.DecodeString(encoded)
+		err := json.NewDecoder(r.Body).Decode(&a)
+		if err != nil {
+			fmt.Fprint(w, err)
+			return
+		}
+
+		sheetID := a.SheetID
+		val := a.Val
+
+		fmt.Fprint(w, sheetID, val)
+
+	default:
+		http.Error(w, "Metodo non permesso", http.StatusMethodNotAllowed)
+	}
+
+	err := appendToSheet(a)
 	if err != nil {
-		fmt.Println("decode error:", err)
+		fmt.Fprint(w, err)
 		return
 	}
-	fmt.Fprint(w, string(decoded))
+}
+
+func appendToSheet(a Answers) error {
+
+	var srv *sheets.Service
+	var client *http.Client
+	var config *oauth2.Config
+	var list []string
+	var writeRange string
+	var myval []interface{}
+	var vr sheets.ValueRange
+
+	b, err := ioutil.ReadFile("credentials.json")
+	if err != nil {
+		err = fmt.Errorf("Unable to read client secret file: %v", err)
+		goto ERR
+	}
+
+	// If modifying these scopes, delete your previously saved token.json.
+	config, err = google.ConfigFromJSON(b, "https://www.googleapis.com/auth/spreadsheets")
+	if err != nil {
+		err = fmt.Errorf("Unable to parse client secret file to config: %v", err)
+		goto ERR
+	}
+	client = getClient(config)
+
+	srv, err = sheets.New(client)
+	if err != nil {
+		err = fmt.Errorf("Unable to retrieve Sheets client: %v", err)
+		goto ERR
+	}
+
+	writeRange = "A1"
+
+	// if foglio != "" {
+	// 	writeRange = foglio + "!" + writeRange
+	// }
+
+	list = strings.Split(a.Val, ";")
+
+	myval = []interface{}{}
+	for _, l := range list {
+		myval = append(myval, l)
+	}
+	vr.Values = append(vr.Values, myval)
+	vr.Values = append(vr.Values, nil)
+
+	_, err = srv.Spreadsheets.Values.Append(a.SheetID, writeRange, &vr).ValueInputOption("RAW").Do()
+	if err != nil {
+		err = fmt.Errorf("Impossibile effettuare append su google sheet %s : %v", a.SheetID, err)
+		goto ERR
+	}
+
+ERR:
+	return err
+}
+
+// SheetAppendLocal appends data to a google sheet.
+func SheetAppendLocal(sheetID, foglio string, val []string) {
 
 	b, err := ioutil.ReadFile("credentials.json")
 	if err != nil {
@@ -52,9 +132,11 @@ func SheetAppend(w http.ResponseWriter, r *http.Request) { //sheetID string, val
 
 	writeRange := "A1"
 
+	//writeRange = foglio + "!" + writeRange
+
 	var vr sheets.ValueRange
 
-	list := strings.Split(string(decoded), ";")
+	list := val
 
 	myval := []interface{}{}
 	for _, l := range list {
