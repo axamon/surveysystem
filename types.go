@@ -26,6 +26,7 @@ type Survey struct {
 	} `xml:"domande"`
 }
 
+// Survey2 è la struttura in cui parsare le domande
 type Survey2 struct {
 	Utente    string
 	Matricola string
@@ -60,9 +61,16 @@ type Utente struct {
 	Risposte  [][]string
 }
 
+<<<<<<< HEAD
 // InternalTemplate è usato per templates
 // che non esistono sul filesytem.
 type InternalTemplate struct {
 	Name string
 	Text string
+=======
+// Answers sono le risposte da inviare.
+type Answers struct {
+	SheetID string `json:"sheetID"`
+	Val     string `json:"val"`
+>>>>>>> b2ff8f323abf46180ced9a5358a03b91dfc82293
 }

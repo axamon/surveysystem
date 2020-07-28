@@ -3,7 +3,10 @@ package main
 import (
 	"encoding/xml"
 	"fmt"
+<<<<<<< HEAD
 	"io/ioutil"
+=======
+>>>>>>> b2ff8f323abf46180ced9a5358a03b91dfc82293
 	"log"
 	"net/http"
 	"strings"
@@ -16,10 +19,12 @@ func survey(w http.ResponseWriter, r *http.Request) {
 
 	case "GET":
 		session, _ := store.Get(r, "surveyCTIO")
-		data, err := ioutil.ReadFile("surveys/primo.xml")
+		o, err := staticPrimoXml()
 		if err != nil {
 			log.Println(err)
 		}
+		data := o.bytes // ioutil.ReadFile("surveys/primo.xml")
+
 		note := &Survey2{}
 		err = xml.Unmarshal([]byte(data), &note)
 		if err != nil {
@@ -31,13 +36,6 @@ func survey(w http.ResponseWriter, r *http.Request) {
 		fine, _ := time.Parse("20060102", note.Fine)
 		note.Inizio = inizio.Format("2006-01-02")
 		note.Fine = fine.Format("2006-01-02")
-
-		// Crea file csv.
-		var fileCSV = "surveyID" + note.ID + ".csv"
-		err = createFileCsv(fileCSV, len(note.Domande.Domanda))
-		if err != nil {
-			log.Printf("csv crearion in error: impossibile creare file csv: %s\n", fileCSV)
-		}
 
 		// Serve template
 		err = templates.ExecuteTemplate(w, "survey.gohtml", note)

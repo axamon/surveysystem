@@ -1,0 +1,23 @@
+<?xml version="1.0"?>
+<survey id="2" titolo="Cyber Security Process Adoption" inizio="20200721" fine="20200731" video="https://web.microsoftstream.com/embed/video/4c88d6fb-f9ad-4ca1-9a4e-4d51cf77e5f7?autoplay=false&amp;showinfo=true">
+<domande>
+    <domanda idDomanda="1" tipo="libera">Quanti sono i capisaldi del sistema Crisis Management di TIM?</domanda>
+    <domanda idDomanda="2" tipo="booleana">Aumentare la resilienza è uno degli obiettivi della procedura?</domanda>
+    <domanda idDomanda="3" tipo="booleana">La pianificazione rientra nelle 4 fasi del Crisis Management di TIM?</domanda>
+    <domanda idDomanda="4" tipo="libera">Da quante funzioni è composto l'Operationa Crisis Team in CTIO?</domanda>
+    <domanda idDomanda="5" tipo="libera">Che livello di gravità viene assegnato a un evento critico?</domanda>
+    <domanda idDomanda="6" tipo="booleana">L'OCT deve occuparsi anche delle relazioni con i social media?"</domanda>
+    <domanda idDomanda="7" tipo="libera">Massimo quante ore sono previste da KPI per l'attivazione operativa?</domanda>
+    <domanda idDomanda="8" tipo="multipla">Quali sono gli attori che partecipano al processo?
+        <opzioni>
+            <opzione>Operationl Crisis Team</opzione>
+            <opzione>Crisis Chief</opzione>
+            <opzione>CEO</opzione>
+            <opzione>Security Operation Center</opzione>
+            <opzione>Tutte le strutture di 2° livello</opzione>
+            <opzione>Crisis Management</opzione>
+            <opzione>Crisis Managemen Committee</opzione>
+        </opzioni>
+    </domanda>
+</domande>
+</survey>

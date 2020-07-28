@@ -1,14 +1,19 @@
 package main
 
 import (
-	"html/template"
+	"context"
 	"log"
 	"net/http"
+	"time"
 )
 
 func middleware(next http.Handler) http.Handler {
+
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		templates = template.Must(template.ParseGlob("./templates/*.gohtml"))
+
+		ctx, cancel := context.WithTimeout(r.Context(), 200*time.Millisecond)
+		defer cancel()
 
 		switch r.URL.RequestURI() {
 		case "/survey":
@@ -19,15 +24,24 @@ func middleware(next http.Handler) http.Handler {
 			// Se l'utente non è autenticato restituisce il template errore.
 			if auth, ok := session.Values["authenticated"].(bool); !ok || !auth {
 				w.WriteHeader(http.StatusForbidden)
+<<<<<<< HEAD
 				err := templates.ExecuteTemplate(w, "error.gothml", nil)
+=======
+				err := templates.ExecuteTemplate(w, "error.gohtml", nil)
+>>>>>>> b2ff8f323abf46180ced9a5358a03b91dfc82293
 				if err != nil {
 					log.Println(err)
 				}
 				return
 			}
+			select {
+			case <-ctx.Done():
+				log.Printf("Took too long to serve %s: %v\n", r.RequestURI, ctx.Err())
+			}
 
 			fallthrough
 		default:
+			w.Header().Set("Cache-Control", "no-store, no-cache, must-revalidate, post-check=0, pre-check=0")
 			next.ServeHTTP(w, r)
 			return
 		}
