@@ -58,7 +58,7 @@ func survey(w http.ResponseWriter, r *http.Request) {
 
 				t.Tipo = v[1]
 				if t.Tipo == "multipla" {
-					t.Opzioni.Opzione = v[1:]
+					t.Opzioni.Opzione = v[2:]
 				}
 				newsurvey.Domande.Domanda = append(newsurvey.Domande.Domanda, t)
 			}
@@ -69,6 +69,7 @@ func survey(w http.ResponseWriter, r *http.Request) {
 		fine, _ := time.Parse("20060102", newsurvey.Fine)
 		newsurvey.Inizio = inizio.Format("2006-01-02")
 		newsurvey.Fine = fine.Format("2006-01-02")
+		newsurvey.Department = session.Values["department"].(string)
 
 		// Serve template
 		err := templates.ExecuteTemplate(w, "survey.gohtml", newsurvey)

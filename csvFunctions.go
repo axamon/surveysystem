@@ -19,12 +19,12 @@ func writeToCSV(data map[string][]string) error {
 	defer cancel()
 
 	var (
-		err       error
-		record    []string
-		matricola string
+		err                   error
+		record                []string
+		matricola, department string
 	)
 
-	for i := 1; i < len(data)-2; i++ {
+	for i := 1; i < len(data)-3; i++ {
 		if v, ok := data[strconv.Itoa(i)]; ok {
 			record = append(record, strings.Join(v, ","))
 		} else {
@@ -32,12 +32,14 @@ func writeToCSV(data map[string][]string) error {
 		}
 	}
 	matricola = "\"" + strings.Join(data["matricola"], "") + "\""
+	department = strings.Join(data["department"], "")
 	record = append(record,
 		time.Now().Format("20060102T15:04"),
-		matricola)
+		matricola,
+		department)
 
 	answers := new(Answers)
-	answers.SheetID = "1dKXJ2bm_ZYm3tlIMmFcFfM4hjtKXmqndigjekd_H_yo"
+	answers.SheetID = strings.Join(data["surveyID"], "")
 	answers.Val = strings.Join(record, ";")
 
 	payload, err := json.Marshal(answers)

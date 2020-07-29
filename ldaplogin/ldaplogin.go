@@ -15,13 +15,13 @@ var LDAPURL = "ldap://directory.cww.telecomitalia.it:389"
 var LDAPBASE = "OU=Telecomitalia,O=Telecom Italia Group"
 
 // IsOK verifica se le credenziali passate sono accettate.
-func IsOK(username, password string) (bool, string, error) {
+func IsOK(username, password string) (bool, UserInfo, error) {
 
 	var (
-		userdn, usercn string
-		err            error
-		searchRequest  *ldap.SearchRequest
-		ldapResponse   *ldap.SearchResult
+		userdn, usercn, department string
+		err                        error
+		searchRequest              *ldap.SearchRequest
+		ldapResponse               *ldap.SearchResult
 	)
 
 	// searchRequest è la richista da inviare al server LDAP.
@@ -29,7 +29,7 @@ func IsOK(username, password string) (bool, string, error) {
 		LDAPBASE,
 		ldap.ScopeWholeSubtree, ldap.NeverDerefAliases, 0, 0, false,
 		fmt.Sprintf("(&(objectClass=organizationalPerson)(uid=%s))", username),
-		[]string{"dn", "cn"}, // viene richiesta matricola con nome e cognome.
+		[]string{"dn", "cn", "department"}, // viene richiesta matricola con nome e cognome.
 		nil,
 	)
 
@@ -55,6 +55,7 @@ func IsOK(username, password string) (bool, string, error) {
 	// userdn è il nome interno a LDAP che ideticfica l'utente.
 	userdn = ldapResponse.Entries[0].DN
 	usercn = ldapResponse.Entries[0].GetAttributeValue("cn")
+	department = ldapResponse.Entries[0].GetAttributeValue("department")
 
 	// tenta il binding su LDAP con username valido su LDAP e password.
 	err = ldapconn.Bind(userdn, password)
@@ -64,5 +65,5 @@ func IsOK(username, password string) (bool, string, error) {
 	}
 
 ERR:
-	return err == nil, usercn, err
+	return err == nil, UserInfo{Matricola: userdn, NomeCognome: usercn, Department: department}, err
 }

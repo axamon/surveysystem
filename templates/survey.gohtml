@@ -15,6 +15,7 @@
 <form method="POST" action="/survey/">
 <input type="hidden" id="surveyID" name="surveyID" value={{.ID}}>
 <input type="hidden" id="utente" name="utente" value={{.Utente}}>
+<input type="hidden" id="department" name="department" value={{.Department}}>
 <input type="hidden" id="matricola" name="matricola" value={{.Matricola}}>
 <ol>
 {{range $index, $value := .Domande.Domanda}}

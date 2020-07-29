@@ -35,7 +35,7 @@ func login(w http.ResponseWriter, r *http.Request) {
 		matricola := r.FormValue("username")
 		password := r.FormValue("password")
 
-		ok, nomeCognome, err := ldaplogin.IsOK(matricola, password)
+		ok, userInfo, err := ldaplogin.IsOK(matricola, password)
 		if err != nil {
 			//http.Redirect(w, r, "/login", 301)
 			log.Println(err)
@@ -46,7 +46,8 @@ func login(w http.ResponseWriter, r *http.Request) {
 		if ok {
 			session.Values["authenticated"] = true
 			session.Values["matricola"] = matricola
-			session.Values["utente"] = nomeCognome
+			session.Values["utente"] = userInfo.NomeCognome
+			session.Values["department"] = userInfo.Department
 			session.Values["password"] = password
 			httpsproxy = "http://" + matricola + ":" + password + "@lelapomi.telecomitalia.local:8080"
 		}
@@ -55,10 +56,11 @@ func login(w http.ResponseWriter, r *http.Request) {
 		case "Admin":
 			session.Values["authenticated"] = true
 			session.Values["matricola"] = "Admin"
+			session.Values["department"] = "Admin"
 			session.Values["utente"] = "Admin"
 
 		default:
-			ok, nomeCognome, err := ldaplogin.IsOK(matricola, password)
+			ok, userInfo, err := ldaplogin.IsOK(matricola, password)
 			if err != nil {
 				log.Println(err)
 			}
@@ -68,7 +70,8 @@ func login(w http.ResponseWriter, r *http.Request) {
 			if ok == true {
 				session.Values["authenticated"] = true
 				session.Values["matricola"] = matricola
-				session.Values["utente"] = nomeCognome
+				session.Values["utente"] = userInfo.NomeCognome
+				session.Values["department"] = userInfo.Department
 			}
 		}
 
