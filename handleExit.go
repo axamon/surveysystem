@@ -32,7 +32,7 @@ func exit(w http.ResponseWriter, r *http.Request) {
 			log.Println(err)
 		}
 		go func() {
-			time.Sleep(3 * time.Second)
+			time.Sleep(1 * time.Second)
 			log.Fatalf("Uscita da app.")
 		}()
 

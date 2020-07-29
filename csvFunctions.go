@@ -6,12 +6,11 @@ import (
 	"encoding/json"
 	"log"
 	"net/http"
+	"net/url"
 	"os"
 	"strconv"
 	"strings"
 	"time"
-
-	"github.com/parnurzeal/gorequest"
 )
 
 // writeToCSV registra le risposte nel file csv.
@@ -20,12 +19,12 @@ func writeToCSV(data map[string][]string) error {
 	defer cancel()
 
 	var (
-		err                      error
-		record                   []string
-		matricola, list, sheetID string
+		err                   error
+		record                []string
+		matricola, department string
 	)
 
-	for i := 1; i < len(data)-2; i++ {
+	for i := 1; i < len(data)-3; i++ {
 		if v, ok := data[strconv.Itoa(i)]; ok {
 			record = append(record, strings.Join(v, ","))
 		} else {
@@ -33,46 +32,36 @@ func writeToCSV(data map[string][]string) error {
 		}
 	}
 	matricola = "\"" + strings.Join(data["matricola"], "") + "\""
+	department = strings.Join(data["department"], "")
 	record = append(record,
 		time.Now().Format("20060102T15:04"),
-		matricola)
-
-	list = strings.Join(record, ";")
-
-	sheetID = "1dKXJ2bm_ZYm3tlIMmFcFfM4hjtKXmqndigjekd_H_yo"
+		matricola,
+		department)
 
 	answers := new(Answers)
-	answers.SheetID = sheetID
-	answers.Val = list
+	answers.SheetID = strings.Join(data["surveyID"], "")
+	answers.Val = strings.Join(record, ";")
 
 	payload, err := json.Marshal(answers)
 	if err != nil {
 		log.Printf("marshal of answers in error: %v\n", err)
 	}
 
-	url := "https://europe-west6-ctio-8274d.cloudfunctions.net/SheetAppend"
-	req, err := http.NewRequest("POST", url, bytes.NewBuffer(payload))
+	os.Setenv("HTTPS_PROXY", httpsproxy)
+
+	urlFunction := "https://europe-west6-ctio-8274d.cloudfunctions.net/SheetAppend"
+	req, err := http.NewRequest("POST", urlFunction, bytes.NewBuffer(payload))
 	req.Header.Set("X-Custom-Header", "answers")
 	req.Header.Set("Content-Type", "application/json")
 
-	client := &http.Client{}
+	proxyURL, err := url.Parse(httpsproxy)
+	// myClient := &http.Client{Transport: &http.Transport{Proxy: http.ProxyURL(proxyURL)}}
+	client := &http.Client{Transport: &http.Transport{Proxy: http.ProxyURL(proxyURL)}}
 	resp, err := client.Do(req)
 	if err != nil {
 		panic(err)
 	}
 	defer resp.Body.Close()
-
-	// link visualizzazione risultati
-	// https://docs.google.com/spreadsheets/d/1KXUdTBXDhGvBU1U8SKuf1OBUqYpyQdLW6GMHTxylk2Y/edit#gid=0
-	os.Setenv("HTTPS_PROXY", httpsproxy)
-
-	request := gorequest.New()
-	_, _, errs := request.Proxy(httpsproxy).Get("https://us-central1-ctio-8274d.cloudfunctions.net/SheetAppend?val=" + encoded + "&sheetID=" + sheetID + "&foglio=Risposte").End()
-	for _, err := range errs {
-		if err != nil {
-			return err
-		}
-	}
 
 	select {
 	case <-ctx.Done():
