@@ -68,13 +68,14 @@ func main() {
 	}
 
 	r = http.NewServeMux()
+	///rr := mux.NewRouter()
 
 	fs = http.FileServer(AssetFile()) // http.Dir("./static"))
 	r.Handle("/static/", fs)          // http.StripPrefix("/static/", fs))
 	r.HandleFunc("/", index)
 	r.HandleFunc("/login", login)
 	r.HandleFunc("/logout", logout)
-	r.HandleFunc("/survey", survey)
+	r.HandleFunc("/survey/", survey)
 	r.HandleFunc("/exit", exit)
 
 	loggedRouter = handlers.LoggingHandler(os.Stdout, middleware(r))
