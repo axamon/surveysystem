@@ -53,7 +53,9 @@ func SheetRead(w http.ResponseWriter, r *http.Request) {
 		} else {
 			for _, row := range resp.Values {
 				// Print columns A and E, which correspond to indices 0 and 4.
-				fmt.Fprintf(w, "%s, %s,%s.%s\n", row[0], row[1], row[2], row[3])
+				for _, element := range row {
+					fmt.Fprintf(w, "%s,", element)
+				}
 			}
 		}
 
