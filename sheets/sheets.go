@@ -24,6 +24,7 @@ func SheetRead(w http.ResponseWriter, r *http.Request) {
 		values := r.URL.Query()
 
 		sheetID := values.Get("sheetID")
+		readRange := values.Get("readRange")
 
 		b, err := ioutil.ReadFile("credentials.json")
 		if err != nil {
@@ -42,7 +43,6 @@ func SheetRead(w http.ResponseWriter, r *http.Request) {
 			fmt.Fprintf(w, "Unable to retrieve Sheets client: %v", err)
 		}
 
-		readRange := "A1:D"
 		resp, err := srv.Spreadsheets.Values.Get(sheetID, readRange).Do()
 		if err != nil {
 			fmt.Fprintf(w, "Unable to retrieve data from sheet: %v", err)
