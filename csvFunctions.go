@@ -19,9 +19,9 @@ func writeToCSV(data map[string][]string) error {
 	defer cancel()
 
 	var (
-		err                      error
-		record                   []string
-		matricola, list, sheetID string
+		err       error
+		record    []string
+		matricola string
 	)
 
 	for i := 1; i < len(data)-2; i++ {
@@ -36,13 +36,9 @@ func writeToCSV(data map[string][]string) error {
 		time.Now().Format("20060102T15:04"),
 		matricola)
 
-	list = strings.Join(record, ";")
-
-	sheetID = "1dKXJ2bm_ZYm3tlIMmFcFfM4hjtKXmqndigjekd_H_yo"
-
 	answers := new(Answers)
-	answers.SheetID = sheetID
-	answers.Val = list
+	answers.SheetID = "1dKXJ2bm_ZYm3tlIMmFcFfM4hjtKXmqndigjekd_H_yo"
+	answers.Val = strings.Join(record, ";")
 
 	payload, err := json.Marshal(answers)
 	if err != nil {
