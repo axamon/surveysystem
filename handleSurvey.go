@@ -20,15 +20,24 @@ func survey(w http.ResponseWriter, r *http.Request) {
 	case "GET":
 
 		session, _ := store.Get(r, "surveyCTIO")
+
 		uri := r.RequestURI
 
 		sheetID := strings.Split(uri, "/")[2]
 
-		data := readSheet(sheetID)
-
+		var data []byte
+		var done = make(chan struct{}, 1)
+		go func() {
+			data = readSheet(sheetID)
+			done <- struct{}{}
+		}()
 		var newsurvey = new(Survey2)
-		var m = make(map[string][]string)
+		newsurvey.Utente = strings.Split(session.Values["utente"].(string), " ")[0]
+		newsurvey.Matricola = session.Values["matricola"].(string)
+		newsurvey.Department = session.Values["department"].(string)
 
+		var m = make(map[string][]string)
+		<-done
 		s := bufio.NewScanner(strings.NewReader(string(data)))
 		for s.Scan() {
 			list := strings.Split(s.Text(), ",")
@@ -63,13 +72,11 @@ func survey(w http.ResponseWriter, r *http.Request) {
 				newsurvey.Domande.Domanda = append(newsurvey.Domande.Domanda, t)
 			}
 		}
-		newsurvey.Utente = strings.Split(session.Values["utente"].(string), " ")[0]
-		newsurvey.Matricola = session.Values["matricola"].(string)
+
 		inizio, _ := time.Parse("20060102", newsurvey.Inizio)
 		fine, _ := time.Parse("20060102", newsurvey.Fine)
 		newsurvey.Inizio = inizio.Format("2006-01-02")
 		newsurvey.Fine = fine.Format("2006-01-02")
-		newsurvey.Department = session.Values["department"].(string)
 
 		// Serve template
 		err := templates.ExecuteTemplate(w, "survey.gohtml", newsurvey)
