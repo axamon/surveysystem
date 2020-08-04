@@ -1,6 +1,6 @@
 module survey
 
-go 1.13
+go 1.14
 
 require (
 	github.com/elazarl/go-bindata-assetfs v1.0.1
