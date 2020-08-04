@@ -126,9 +126,9 @@ func appendToSheet(a Answers) error {
 
 	writeRange = "A1"
 
-	// if foglio != "" {
-	// 	writeRange = foglio + "!" + writeRange
-	// }
+	if a.Foglio != "" {
+		writeRange = a.Foglio + "!" + writeRange
+	}
 
 	list = strings.Split(a.Val, ";")
 

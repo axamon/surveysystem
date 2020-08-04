@@ -27,5 +27,9 @@ L'accesso è basato su LDAP aziendale.
 
     https://europe-west6-ctio-8274d.cloudfunctions.net/SheetAppend
 
+Update function
+
+    gcloud functions deploy SheetAppend --region europe-west6 --trigger-http --allow-unauthenticated
+
 # Vedere risultati
     https://docs.google.com/spreadsheets/d/1dKXJ2bm_ZYm3tlIMmFcFfM4hjtKXmqndigjekd_H_yo/edit?usp=sharing

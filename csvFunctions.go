@@ -40,6 +40,7 @@ func writeToCSV(data map[string][]string) error {
 
 	answers := new(Answers)
 	answers.SheetID = strings.Join(data["surveyID"], "")
+	answers.Foglio = "Risposte"
 	answers.Val = strings.Join(record, ";")
 
 	payload, err := json.Marshal(answers)
