@@ -33,7 +33,7 @@ func init() {
 }
 
 func main() {
-	ctx, cancel := context.(context.Background(), 30*time.Minute)
+	ctx, cancel := context.WithTimeout(context.Background(), 30*time.Minute)
 	defer cancel()
 
 	go func() {
