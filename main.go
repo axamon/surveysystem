@@ -33,12 +33,12 @@ func init() {
 }
 
 func main() {
-	ctx, cancel := context.WithTimeout(context.Background(), 30*time.Minute)
+	ctx, cancel := context.(context.Background(), 30*time.Minute)
 	defer cancel()
 
 	go func() {
 		<-ctx.Done()
-		log.Fatal("Timeout")
+		log.Println("Timeout")
 	}()
 
 	var (

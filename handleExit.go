@@ -33,7 +33,7 @@ func exit(w http.ResponseWriter, r *http.Request) {
 		}
 		go func() {
 			time.Sleep(1 * time.Second)
-			log.Fatalf("Uscita da app.")
+			log.Println("Uscita da app.")
 		}()
 
 	default:
