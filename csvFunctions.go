@@ -24,6 +24,15 @@ func writeToCSV(data map[string][]string) error {
 		matricola, department string
 	)
 
+	matricola = "\"" + strings.Join(data["matricola"], "") + "\""
+	department = strings.Join(data["department"], "")
+
+	record = append(record,
+		strings.Join( data["timestampinizio"], ""),
+		time.Now().Format("02/01/2006 15:04:05"),
+		matricola,
+		department)
+
 	for i := 1; i < len(data)-3; i++ {
 		if v, ok := data[strconv.Itoa(i)]; ok {
 			record = append(record, strings.Join(v, ","))
@@ -31,13 +40,7 @@ func writeToCSV(data map[string][]string) error {
 			record = append(record, "")
 		}
 	}
-	matricola = "\"" + strings.Join(data["matricola"], "") + "\""
-	department = strings.Join(data["department"], "")
-	record = append(record,
-		time.Now().Format("20060102T15:04"),
-		matricola,
-		department)
-
+	
 	answers := new(Answers)
 	answers.SheetID = strings.Join(data["surveyID"], "")
 	answers.Foglio = "Risposte"

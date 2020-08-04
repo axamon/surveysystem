@@ -43,6 +43,7 @@ func survey(w http.ResponseWriter, r *http.Request) {
 			list := strings.Split(s.Text(), ",")
 			m[list[0]] = list[1:]
 		}
+		newsurvey.TimestampInizio = time.Now().Format("02/01/2006 15:04:05")
 		newsurvey.Titolo = m["Nome Survey"][0]
 		newsurvey.ID = m["SurveyID"][0]
 		newsurvey.Video = m["Video"][0]
@@ -58,16 +59,22 @@ func survey(w http.ResponseWriter, r *http.Request) {
 				Opzione []string "xml:\"opzione\""
 			} "xml:\"opzioni\""
 		}
+
 		for k, v := range m {
+			if v[1] == "adoption" && !stringInSlice(newsurvey.Department, m["Funzioni interessate"]) {
+				continue
+			}
+		
 			if _, err := strconv.Atoi(k); err == nil {
+				
 				var t d
 				t.IDDomanda = k
 
 				t.Text = v[0]
 
-				t.Tipo = v[1]
+				t.Tipo = v[2]
 				if t.Tipo == "multipla" {
-					t.Opzioni.Opzione = v[2:]
+					t.Opzioni.Opzione = v[3:]
 				}
 				newsurvey.Domande.Domanda = append(newsurvey.Domande.Domanda, t)
 			}
@@ -128,4 +135,13 @@ func readSheet(sheetID string) []byte {
 
 	return body
 
+}
+
+func stringInSlice(a string, list []string) bool {
+	for _, b := range list {
+		if b == a {
+			return true
+		}
+	}
+	return false
 }

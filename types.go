@@ -29,6 +29,7 @@ type Survey struct {
 
 // Survey2 è la struttura in cui parsare le domande
 type Survey2 struct {
+	TimestampInizio string
 	Utente     string
 	Matricola  string
 	Department string

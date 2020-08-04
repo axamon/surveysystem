@@ -16,6 +16,7 @@
 <input type="hidden" id="surveyID" name="surveyID" value={{.ID}}>
 <input type="hidden" id="utente" name="utente" value={{.Utente}}>
 <input type="hidden" id="department" name="department" value={{.Department}}>
+<input type="hidden" id="department" name="timestampinizio" value={{.TimestampInizio}}>
 <input type="hidden" id="matricola" name="matricola" value={{.Matricola}}>
 <ol>
 {{range $index, $value := .Domande.Domanda}}
@@ -27,12 +28,23 @@
         <input type="radio" id="no" name={{.IDDomanda}} value="no" required>
         <label for="no">No</label>
         <br>
+        <br>
     {{end}}
 
     {{ if (eq .Tipo "libera") }}
         <li>{{.Text}}</li>
-        <input type="textarea" id="textarea" name={{.IDDomanda}} value="" required>
+        <input type="textarea" id="textarea" rows="1" cols="2" name={{.IDDomanda}} value="" required>
+        <br>
+        <br>
     {{end}}
+
+     {{ if (eq .Tipo "range") }}
+        <li>{{.Text}}</li>
+       per nulla <input type="range" id="vol" name={{.IDDomanda}} min="0" max="100" step="2" required> completamente
+        <br>
+        <br>
+    {{end}}
+     
 
     {{ if (eq .Tipo "multipla") }}
         <li>{{.Text}}</li>
@@ -42,9 +54,12 @@
              <option value={{$value}}>{{$value}}</option>
         {{end}}
         </select>
+        <br>
+        <br>
     {{end}}
 
 {{end}}
+<br>
 <br>
  <input type="submit" value="Invia">
 </ol>
