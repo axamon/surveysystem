@@ -43,7 +43,7 @@
      {{ if (eq .Tipo "range") }}
         <li>{{.Text}}</li>
         <br>
-       per nulla <input type="range" id={{.IDDomanda}} name={{.IDDomanda}} min="0" max="100" step="2" oninput="outputa.Value = {{.IDDomanda}}.Value" required> completamente
+       per nulla <input type="range" id={{.IDDomanda}} name={{.IDDomanda}} min="0" max="100" step="2" required> completamente
         <br>
         <br>
     {{end}}
