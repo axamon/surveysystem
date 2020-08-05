@@ -45,8 +45,6 @@
         <br>
        per nulla <input type="range" id={{.IDDomanda}} name={{.IDDomanda}} min="0" max="100" step="2" oninput="outputa.Value = {{.IDDomanda}}.Value" required> completamente
         <br>
-        <output name="outputa" id="outputa">50</output>
-        <br>
         <br>
     {{end}}
      
@@ -89,8 +87,7 @@
    {{ if (eq .Tipo "range") }}
         <li>{{.Text}}</li>
         <br>
-       per nulla <input type="range" id={{.IDDomanda}} name={{.IDDomanda}} min="0" max="100" step="2" oninput='output{{.IDDomanda}}.Value = {{.IDDomanda}}.Value' required> completamente
-        <output name="output{{.IDDomanda}}" id="output{{.IDDomanda}}">50</output>
+       per nulla <input type="range" id={{.IDDomanda}} name={{.IDDomanda}} min="0" max="100" step="2" required> completamente
         <br>
         <br>
     {{end}}
