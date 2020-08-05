@@ -31,7 +31,7 @@ func survey(w http.ResponseWriter, r *http.Request) {
 			data = readSheet(sheetID)
 			done <- struct{}{}
 		}()
-		var newsurvey = new(Survey2)
+		var newsurvey = new(Survey3)
 		newsurvey.Utente = strings.Split(session.Values["utente"].(string), " ")[0]
 		newsurvey.Matricola = session.Values["matricola"].(string)
 		newsurvey.Department = session.Values["department"].(string)
@@ -61,12 +61,9 @@ func survey(w http.ResponseWriter, r *http.Request) {
 		}
 
 		for k, v := range m {
-			if v[1] == "adoption" && !stringInSlice(newsurvey.Department, m["Funzioni interessate"]) {
-				continue
-			}
-		
+
 			if _, err := strconv.Atoi(k); err == nil {
-				
+
 				var t d
 				t.IDDomanda = k
 
@@ -76,7 +73,15 @@ func survey(w http.ResponseWriter, r *http.Request) {
 				if t.Tipo == "multipla" {
 					t.Opzioni.Opzione = v[3:]
 				}
-				newsurvey.Domande.Domanda = append(newsurvey.Domande.Domanda, t)
+				switch v[1] {
+				case "adoption":
+					if !stringInSlice(newsurvey.Department, m["Funzioni interessate"]) {
+						continue
+					}
+					newsurvey.Domande.Adoption = append(newsurvey.Domande.Adoption, t)
+				default:
+					newsurvey.Domande.Domanda = append(newsurvey.Domande.Domanda, t)
+				}
 			}
 		}
 

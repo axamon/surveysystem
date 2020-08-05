@@ -30,17 +30,17 @@ type Survey struct {
 // Survey2 è la struttura in cui parsare le domande
 type Survey2 struct {
 	TimestampInizio string
-	Utente     string
-	Matricola  string
-	Department string
-	XMLName    xml.Name `xml:"survey"`
-	Text       string   `xml:",chardata"`
-	ID         string   `xml:"id,attr"`
-	Titolo     string   `xml:"titolo,attr"`
-	Inizio     string   `xml:"inizio,attr"`
-	Fine       string   `xml:"fine,attr"`
-	Video      string   `xml:"video,attr"`
-	Domande    struct {
+	Utente          string
+	Matricola       string
+	Department      string
+	XMLName         xml.Name `xml:"survey"`
+	Text            string   `xml:",chardata"`
+	ID              string   `xml:"id,attr"`
+	Titolo          string   `xml:"titolo,attr"`
+	Inizio          string   `xml:"inizio,attr"`
+	Fine            string   `xml:"fine,attr"`
+	Video           string   `xml:"video,attr"`
+	Domande         struct {
 		Text    string `xml:",chardata"`
 		Domanda []struct {
 			Text      string `xml:",chardata"`
@@ -51,6 +51,42 @@ type Survey2 struct {
 				Opzione []string `xml:"opzione"`
 			} `xml:"opzioni"`
 		} `xml:"domanda"`
+	} `xml:"domande"`
+}
+
+// Survey3 è la struttura in cui parsare le domande
+type Survey3 struct {
+	TimestampInizio string
+	Utente          string
+	Matricola       string
+	Department      string
+	XMLName         xml.Name `xml:"survey"`
+	Text            string   `xml:",chardata"`
+	ID              string   `xml:"id,attr"`
+	Titolo          string   `xml:"titolo,attr"`
+	Inizio          string   `xml:"inizio,attr"`
+	Fine            string   `xml:"fine,attr"`
+	Video           string   `xml:"video,attr"`
+	Domande         struct {
+		Text    string `xml:",chardata"`
+		Domanda []struct {
+			Text      string `xml:",chardata"`
+			IDDomanda string `xml:"idDomanda,attr"`
+			Tipo      string `xml:"tipo,attr"`
+			Opzioni   struct {
+				Text    string   `xml:",chardata"`
+				Opzione []string `xml:"opzione"`
+			} `xml:"opzioni"`
+		} `xml:"domanda"`
+		Adoption []struct {
+			Text      string `xml:",chardata"`
+			IDDomanda string `xml:"idDomanda,attr"`
+			Tipo      string `xml:"tipo,attr"`
+			Opzioni   struct {
+				Text    string   `xml:",chardata"`
+				Opzione []string `xml:"opzione"`
+			} `xml:"opzioni"`
+		} `xml:"adoption"`
 	} `xml:"domande"`
 }
 
