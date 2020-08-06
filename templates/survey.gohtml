@@ -45,18 +45,37 @@
         <br>
     {{end}}
      
-
+{{/* 
     {{ if (eq .Tipo "multipla") }}
         <li>{{.Text}}</li>
-        <select name={{.IDDomanda}} id="elementi" multiple>
+        {{range $indexr, $value := .Opzioni.Opzione}}
+        {{ $length := len $value }}
+        {{ if gt $length 0}}
+        <input type="checkbox" name={{$value}} id={{$value}} value={{$value}}>
+        <label for={{$value}}>{{$value}}</label><br>
+        {{end}}
+        {{end}}
+        <br>
+        <br>
+    {{end}} */}}
+
+  {{ if (eq .Tipo "multipla") }}
+        <li>{{.Text}}</li>
+        <p><small>Per selezionare o deselezionare le opzioni tieni premuto CTRL</small></p>
+        {{ $size := len .Opzioni.Opzione }}
+        <select name={{.IDDomanda}} id="elementi" size={{$size}} multiple>
         <option value="ND" selected="selected"></option>
         {{range $indexr, $value := .Opzioni.Opzione}}
+        {{ $length := len $value }}
+        {{ if gt $length 0}}
              <option value={{$value}}>{{$value}}</option>
         {{end}}
+         {{end}}
         </select>
         <br>
         <br>
     {{end}}
+
 
 {{end}}
 
@@ -79,12 +98,21 @@
         <br>
     {{end}}
 
+    <script>
+        function show_value(x,y)
+            {
+                document.getElementById(y).innerHTML=x;
+            }
+    </script>
+
    {{ if (eq .Tipo "range") }}
         <li>{{.Text}}</li>
-       per nulla <input type="range" id={{.IDDomanda}} name={{.IDDomanda}} min="0" max="100" step="2" required> completamente
+       per nulla 0 <input type="range" id={{.IDDomanda}} name={{.IDDomanda}} min="0" max="100" step="1" onchange="show_value(this.value,{{.Text}});" required> <span id={{.Text}} style="color:blue;"></span> 100 completamente
         <br>
         <br>
     {{end}}
+
+ 
      
 
     {{ if (eq .Tipo "multipla") }}

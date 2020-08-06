@@ -102,6 +102,7 @@ func survey(w http.ResponseWriter, r *http.Request) {
 			fmt.Fprintf(w, "ParseForm() err: %v", err)
 			return
 		}
+		fmt.Println(r.Form)
 
 		err := writeToCSV(r.Form)
 		if err != nil {
