@@ -25,6 +25,18 @@ func survey(w http.ResponseWriter, r *http.Request) {
 
 		sheetID := strings.Split(uri, "/")[2]
 
+		if inviato, ok := session.Values[sheetID].(bool); ok && inviato {
+			err := templates.ExecuteTemplate(w, "inviato.gohtml", nil)
+			if err != nil {
+				log.Println(err)
+			}
+			return
+		}
+
+		session.Values[sheetID] = true
+
+		session.Save(r, w)
+
 		var data []byte
 		var done = make(chan struct{}, 1)
 		go func() {
