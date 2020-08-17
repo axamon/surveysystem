@@ -15,14 +15,14 @@ func index(w http.ResponseWriter, r *http.Request) {
 		ua := r.UserAgent()
 		if !strings.Contains(ua, "Chrome") && !strings.Contains(ua, "Firefox") {
 			log.Printf("Browser non supportato: %s\n", ua)
-			err := templates.ExecuteTemplate(w, "nobrowser.gohtml", nil)
+			err := templates.ExecuteTemplate(w, "nobrowser.gohtml", footerData)
 			if err != nil {
 				log.Println(err)
 			}
 			return
 		}
 
-		err := templates.ExecuteTemplate(w, "index.gohtml", nil)
+		err := templates.ExecuteTemplate(w, "index.gohtml", footerData)
 		if err != nil {
 			log.Println(err)
 		}

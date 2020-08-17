@@ -27,7 +27,7 @@ func exit(w http.ResponseWriter, r *http.Request) {
 
 		}
 
-		err = templates.ExecuteTemplate(w, "exit.gohtml", nil)
+		err = templates.ExecuteTemplate(w, "exit.gohtml", footerData)
 		if err != nil {
 			log.Println(err)
 		}

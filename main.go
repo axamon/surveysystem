@@ -18,6 +18,11 @@ import (
 	"github.com/gorilla/sessions"
 )
 
+var footerData FooterInfo
+var Version = "v2.1.1"
+var Autore = "Alberto Bregliano"
+var Anno = "2020"
+
 var templates *template.Template
 var store *sessions.CookieStore
 
@@ -30,6 +35,9 @@ func init() {
 	token := make([]byte, 32)
 	key := []byte(fmt.Sprint(rand.Read(token)))
 	store = sessions.NewCookieStore(key)
+	footerData.Anno = Anno
+	footerData.Versione = Version
+	footerData.Autore = Autore
 }
 
 func main() {

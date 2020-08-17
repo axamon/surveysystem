@@ -20,7 +20,6 @@ func login(w http.ResponseWriter, r *http.Request) {
 
 	session.Values["authenticated"] = false
 	session.Save(r, w)
-	log.Println(session.Values["authenticated"].(bool))
 
 	switch r.Method {
 
@@ -82,16 +81,19 @@ func login(w http.ResponseWriter, r *http.Request) {
 			if err != nil {
 				log.Println(err)
 			}
+			log.Printf("ERROR Login non effettuato per: %s\n", session.Values["utente"].(string))
 			return
 		}
 
-		note := &Survey2{}
+		note := &Survey3{}
 		note.Utente = strings.Split(session.Values["utente"].(string), " ")[0] // Aggiunge nome utente
+		note.Versione = footerData.Versione
 
 		err = templates.ExecuteTemplate(w, "login.gohtml", note)
 		if err != nil {
 			log.Println(err)
 		}
+		log.Printf("OK Login effettuato per: %s\n", session.Values["utente"].(string))
 
 	default:
 		http.Error(w, "Metodo non permesso", http.StatusMethodNotAllowed)

@@ -26,7 +26,7 @@ func survey(w http.ResponseWriter, r *http.Request) {
 		sheetID := strings.Split(uri, "/")[2]
 
 		if inviato, ok := session.Values[sheetID].(bool); ok && inviato {
-			err := templates.ExecuteTemplate(w, "inviato.gohtml", nil)
+			err := templates.ExecuteTemplate(w, "inviato.gohtml", footerData)
 			if err != nil {
 				log.Println(err)
 			}
@@ -47,6 +47,7 @@ func survey(w http.ResponseWriter, r *http.Request) {
 		newsurvey.Utente = strings.Split(session.Values["utente"].(string), " ")[0]
 		newsurvey.Matricola = session.Values["matricola"].(string)
 		newsurvey.Department = session.Values["department"].(string)
+		newsurvey.Versione = footerData.Versione
 
 		var m = make(map[string][]string)
 		<-done
@@ -121,7 +122,7 @@ func survey(w http.ResponseWriter, r *http.Request) {
 			log.Println(err)
 		}
 
-		err = templates.ExecuteTemplate(w, "grazie.gohtml", nil)
+		err = templates.ExecuteTemplate(w, "grazie.gohtml", footerData)
 		if err != nil {
 			log.Println(err)
 		}

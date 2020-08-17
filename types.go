@@ -60,6 +60,7 @@ type Survey3 struct {
 	Utente          string
 	Matricola       string
 	Department      string
+	Versione        string
 	XMLName         xml.Name `xml:"survey"`
 	Text            string   `xml:",chardata"`
 	ID              string   `xml:"id,attr"`
@@ -105,4 +106,11 @@ type Answers struct {
 	SheetID string `json:"sheetID"`
 	Foglio  string `json:"foglio"`
 	Val     string `json:"val"`
+}
+
+// footerInfo informazioni da mostrare nel footer
+type FooterInfo struct {
+	Anno     string
+	Autore   string
+	Versione string
 }

@@ -26,7 +26,7 @@ func logout(w http.ResponseWriter, r *http.Request) {
 
 		}
 
-		err = templates.ExecuteTemplate(w, "logout.gohtml", nil)
+		err = templates.ExecuteTemplate(w, "logout.gohtml", footerData)
 		if err != nil {
 			log.Println(err)
 		}

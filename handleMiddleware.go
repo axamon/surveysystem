@@ -24,7 +24,7 @@ func middleware(next http.Handler) http.Handler {
 			// Se l'utente non è autenticato restituisce il template errore.
 			if auth, ok := session.Values["authenticated"].(bool); !ok || !auth {
 				w.WriteHeader(http.StatusForbidden)
-				err := templates.ExecuteTemplate(w, "error.gohtml", nil)
+				err := templates.ExecuteTemplate(w, "error.gohtml", footerData)
 				if err != nil {
 					log.Println(err)
 				}
