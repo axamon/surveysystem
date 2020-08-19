@@ -1,5 +1,3 @@
-<!DOCTYPE html>
-<html>
 {{template "header"}}
 <title>Survey System</title>
 <body>
@@ -7,7 +5,7 @@
   <div class="title">SURVEY SYSTEM</div>
   <br>
   <br>
-  <img src="/static/survey.jpg"/>
+  <img src="/static/survey.jpg" alt="Survey"/>
   <br>
   <div id="post_form">
       <form method="POST" action="/login">
@@ -21,7 +19,4 @@
       </form>
   </div>
   
-  {{template "footer" . }}
-
-</body>
-</html>
+{{template "footer" . }}

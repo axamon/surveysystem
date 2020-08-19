@@ -2,31 +2,6 @@ package main
 
 import "encoding/xml"
 
-// Survey è la struttura in cui parsare le domande
-type Survey struct {
-	Utente     string
-	Matricola  string
-	Department string
-	XMLName    xml.Name `xml:"survey"`
-	Text       string   `xml:",chardata"`
-	ID         string   `xml:"id,attr"`
-	Titolo     string   `xml:"titolo,attr"`
-	Inizio     string   `xml:"inizio,attr"`
-	Fine       string   `xml:"fine,attr"`
-	Domande    struct {
-		Text    string `xml:",chardata"`
-		Domanda []struct {
-			Text      string `xml:",chardata"`
-			IDDomanda string `xml:"idDomanda,attr"`
-			Tipo      string `xml:"tipo,attr"`
-			Opzioni   struct {
-				Text    string   `xml:",chardata"`
-				Opzione []string `xml:"opzione"`
-			} `xml:"opzioni"`
-		} `xml:"domanda"`
-	} `xml:"domande"`
-}
-
 // Survey2 è la struttura in cui parsare le domande
 type Survey2 struct {
 	TimestampInizio string
@@ -91,16 +66,6 @@ type Survey3 struct {
 	} `xml:"domande"`
 }
 
-// Utente contiene le informazioni anagrafiche.
-type Utente struct {
-	Matricola string
-	Nome      string
-	Cognome   string
-	Mail      string
-	Surveys   []Survey
-	Risposte  [][]string
-}
-
 // Answers sono le risposte degli utenti.
 type Answers struct {
 	SheetID string `json:"sheetID"`
@@ -108,7 +73,7 @@ type Answers struct {
 	Val     string `json:"val"`
 }
 
-// footerInfo informazioni da mostrare nel footer
+// FooterInfo informazioni da mostrare nel footer
 type FooterInfo struct {
 	Anno     string
 	Autore   string

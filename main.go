@@ -19,8 +19,14 @@ import (
 )
 
 var footerData FooterInfo
-var Version = "v2.1.1"
+
+// Version è la versione dell'app
+var Version = "v2.2.1"
+
+// Autore dell'app
 var Autore = "Alberto Bregliano"
+
+// Anno del copyright
 var Anno = "2020"
 
 var templates *template.Template
