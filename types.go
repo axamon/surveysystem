@@ -79,3 +79,10 @@ type FooterInfo struct {
 	Autore   string
 	Versione string
 }
+
+// Surveys lista dei survey esistenti.
+type Surveys struct {
+	NomeUtente   string
+	ListaSurveys []Survey3
+	Footer       FooterInfo
+}

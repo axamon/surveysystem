@@ -84,7 +84,7 @@ func survey(w http.ResponseWriter, r *http.Request) {
 				t.Text = v[0]
 
 				t.Tipo = v[2]
-				if t.Tipo == "multipla" {
+				if t.Tipo == "multipla" || t.Tipo == "singola" {
 					t.Opzioni.Opzione = v[3:]
 				}
 				switch v[1] {

@@ -31,6 +31,18 @@
         <br>
     {{end}}
 
+
+    {{ if (eq .Tipo "singola") }}
+        <li>{{.Text}}</li>
+         {{ $iddomanda := .IDDomanda  }}
+        {{range $indexr, $value := .Opzioni.Opzione}}
+         <input type="radio" id={{$value}} name={{$iddomanda}} value={{$value}} required>
+            <label for={{$value}}>{{$value}}</label>
+         {{end}}
+        <br>
+        <br>
+    {{end}}
+
     {{ if (eq .Tipo "libera") }}
         <li>{{.Text}}</li>
         <input type="textarea" id="textarea" rows="1" cols="2" name={{.IDDomanda}} value="" required>

@@ -85,9 +85,19 @@ func login(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 
-		note := &Survey3{}
-		note.Utente = strings.Split(session.Values["utente"].(string), " ")[0] // Aggiunge nome utente
-		note.Versione = footerData.Versione
+		note := Surveys{}
+		firstSurvey := Survey3{}
+		firstSurvey.ID = "1dKXJ2bm_ZYm3tlIMmFcFfM4hjtKXmqndigjekd_H_yo"
+		firstSurvey.Titolo = "Cyber Security Process Adoption"
+		note.ListaSurveys = append(note.ListaSurveys, firstSurvey)
+
+		firstSurveytest := Survey3{}
+		firstSurveytest.ID = "test"
+		firstSurveytest.Titolo = "test"
+		note.ListaSurveys = append(note.ListaSurveys, firstSurveytest)
+
+		note.NomeUtente = strings.Split(session.Values["utente"].(string), " ")[0] // Aggiunge nome utente
+		note.Footer = footerData
 
 		err = templates.ExecuteTemplate(w, "login.gohtml", note)
 		if err != nil {

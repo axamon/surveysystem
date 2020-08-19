@@ -1,13 +1,15 @@
 {{template "header"}}
 <title>Login</title>
 <body>
-<h2>Ciao {{.Utente}},</h2>
+<h2>Ciao {{.NomeUtente}},</h2>
 <br>
 <h3>Login effettuato</h3>
 <br>
 <h4>Scegli a quale survey partecipare</h4>
-    <a href="/survey/1dKXJ2bm_ZYm3tlIMmFcFfM4hjtKXmqndigjekd_H_yo">Cyber Security Process Adoption</a>
+{{range $index, $value := .ListaSurveys}}
+    <a href="/survey/{{.ID}}">{{.Titolo}}</a>
     <br>
+{{end}}
     <br>
     <small>il survey deve essere completato entro 15 minuti e non è possibile interromperlo
     per riprendero successivamente.</small>
@@ -16,4 +18,4 @@
 
     <br>
     <a href="/">Home</a> - <a href="/logout">Logout</a>
-{{template "footer" . }}
+{{template "footer" . }} 
