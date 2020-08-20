@@ -63,6 +63,17 @@ func survey(w http.ResponseWriter, r *http.Request) {
 		newsurvey.Video = m["Video"][0]
 		newsurvey.Inizio = m["Inizio"][0]
 		newsurvey.Fine = m["Fine"][0]
+		timeout, err := time.Parse("20060102", newsurvey.Fine)
+		if err != nil {
+			log.Printf("Errore, la data di fine del survey non viene correttamente riconosciuta: %s", newsurvey.Fine)
+		}
+		if time.Now().After(timeout) {
+			err = templates.ExecuteTemplate(w, "surveyChiuso.gohtml", newsurvey)
+			if err != nil {
+				log.Println(err)
+			}
+			return
+		}
 
 		type d struct {
 			Text      string "xml:\",chardata\""
@@ -105,7 +116,7 @@ func survey(w http.ResponseWriter, r *http.Request) {
 		newsurvey.Fine = fine.Format("2006-01-02")
 
 		// Serve template
-		err := templates.ExecuteTemplate(w, "survey.gohtml", newsurvey)
+		err = templates.ExecuteTemplate(w, "survey.gohtml", newsurvey)
 		if err != nil {
 			log.Println(err)
 		}

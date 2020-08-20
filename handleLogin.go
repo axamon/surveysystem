@@ -97,7 +97,7 @@ func login(w http.ResponseWriter, r *http.Request) {
 		note.ListaSurveys = append(note.ListaSurveys, firstSurveytest)
 
 		note.NomeUtente = strings.Split(session.Values["utente"].(string), " ")[0] // Aggiunge nome utente
-		note.Footer = footerData
+		note.Versione = footerData.Versione
 
 		err = templates.ExecuteTemplate(w, "login.gohtml", note)
 		if err != nil {

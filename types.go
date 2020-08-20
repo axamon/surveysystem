@@ -84,5 +84,5 @@ type FooterInfo struct {
 type Surveys struct {
 	NomeUtente   string
 	ListaSurveys []Survey3
-	Footer       FooterInfo
+	Versione     string
 }

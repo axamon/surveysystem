@@ -20,7 +20,7 @@
 <input type="hidden" id="matricola" name="matricola" value={{.Matricola}}>
 <ol>
 {{range $index, $value := .Domande.Domanda}}
-
+{{ if lt $index 10}}
     {{ if (eq .Tipo "booleana") }}
         <li>{{.Text}}</li>
         <input type="radio" id="si" name={{.IDDomanda}} value="si" required>
@@ -90,7 +90,7 @@
         <br>
     {{end}}
 
-
+{{end}}
 {{end}}
 
 {{range $index, $value := .Domande.Adoption}}
