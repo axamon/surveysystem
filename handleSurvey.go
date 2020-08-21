@@ -15,6 +15,13 @@ import (
 
 func survey(w http.ResponseWriter, r *http.Request) {
 
+	// serve a evitare i panici
+	defer func() {
+		if err := recover(); err != nil {
+			log.Println("Error:", err)
+		}
+	}()
+
 	switch r.Method {
 
 	case "GET":
@@ -39,9 +46,10 @@ func survey(w http.ResponseWriter, r *http.Request) {
 		session.Save(r, w)
 
 		var data []byte
+		var err error
 		var done = make(chan struct{}, 1)
 		go func() {
-			data = readSheet(sheetID)
+			data, err = readSheet(sheetID)
 			done <- struct{}{}
 		}()
 		var newsurvey = new(Survey3)
@@ -52,6 +60,9 @@ func survey(w http.ResponseWriter, r *http.Request) {
 
 		var m = make(map[string][]string)
 		<-done
+		if err != nil {
+			http.Error(w, "Errore. Accedi nuovamente e riprova <a href=/>Home</a>", http.StatusInternalServerError)
+		}
 		s := bufio.NewScanner(strings.NewReader(string(data)))
 		for s.Scan() {
 			list := strings.Split(s.Text(), ",")
@@ -144,7 +155,13 @@ func survey(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-func readSheet(sheetID string) []byte {
+func readSheet(sheetID string) ([]byte, error) {
+	defer func() {
+		if err := recover(); err != nil {
+			log.Println("Error:", err)
+		}
+	}()
+
 	os.Setenv("HTTPS_PROXY", httpsproxy)
 
 	urlFunction := "https://europe-west6-ctio-8274d.cloudfunctions.net/SheetRead?sheetID=" + sheetID + "&readRange=A1:AA"
@@ -164,7 +181,7 @@ func readSheet(sheetID string) []byte {
 		log.Printf("Errore nel recupero dati da sheet %s : %v", sheetID, err)
 	}
 
-	return body
+	return body, err
 
 }
 
