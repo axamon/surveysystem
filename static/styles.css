@@ -1,6 +1,19 @@
-body {
+html {
+    height: 100%;
+    display: grid;
+  }
+  
+  body {
+    /* width: 80%;
+    max-width: 20em; */
+    /* padding: 25vh 1em; */
+    /* margin: auto; */
     background-color: lightblue;
   }
+  body :last-child {
+    margin-bottom: 0;
+  }
+
   .title{
     position: fixed;
     text-align: left;
@@ -16,6 +29,19 @@ body {
     color: #333333;
     background: lightblue;
   }
+div.surveyTitolo {
+    position: fixed;
+    text-align: left;
+    top: 2px;
+    margin: auto;
+}
+div.questions {
+    position: absolute;
+    top: 170px;
+    text-align: left;    
+    font-size: x-large;
+    z-index: -2;
+}
 .image{ 
     position: fixed;
     text-align: right;
@@ -36,11 +62,3 @@ body {
     padding: 0.2rem;
     cursor: pointer;
     }
-.questions {
-    right: 3px;
-    position: fixed;     
-    text-align: right;    
-    bottom: 2px; 
-    width: auto;
-    font-size: xx-small;
-}
